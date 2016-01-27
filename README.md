@@ -1,4 +1,4 @@
-Webpack node_modules externals
+Webpack node modules externals
 ==============================
 
 [![Version](http://img.shields.io/npm/v/webpack-node-externals.svg)](https://www.npmjs.org/package/webpack-node-externals)
@@ -6,7 +6,7 @@ Webpack node_modules externals
 
 Webpack allows you to define [*externals*](https://webpack.github.io/docs/configuration.html#externals) - modules that should not be bundled.
 
-When bundling with Webpack for the backend - you usually wouldn't want to bundle its node_modules dependencies.
+When bundling with Webpack for the backend - you usually wouldn't want to bundle its `node_modules` dependencies.
 This library creates an *externals* function that ignores `node_modules` when bundling in Webpack.
 
 ## Quick usage
@@ -63,6 +63,7 @@ var nodeExternals = require('webpack-node-externals');
         ...
     };
     ```
+For most use cases, the defaults of `importType` and `modulesDir` should be used.
 
 ### Test
 ```sh
