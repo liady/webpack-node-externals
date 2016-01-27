@@ -14,7 +14,7 @@ function readDir(dirName){
 
 module.exports = function nodeExternals(options) {
     options = options || {};
-    var ignoreList = [].concat(options.ignore || []);
+    var whitelist = [].concat(options.whitelist || []);
     var binaryDirs = [].concat(options.binaryDirs || ['.bin']);
     var importType = options.importType || 'commonjs';
     var modulesDir = options.modulesDir || 'node_modules';
@@ -30,7 +30,7 @@ module.exports = function nodeExternals(options) {
     // return an externals function
     return function(context, request, callback) {
         var pathStart = request.split('/')[0];
-        if (contains(nodeModules, pathStart) && !contains(ignoreList, request)) {
+        if (contains(nodeModules, pathStart) && !contains(whitelist, request)) {
             // mark this module as external
             // https://webpack.github.io/docs/configuration.html#externals
             return callback(null, importType + " " + request);
