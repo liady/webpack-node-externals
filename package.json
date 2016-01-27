@@ -1,6 +1,6 @@
 {
   "name": "webpack-node-externals",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Allows you not to bundle node_modules in Webpack",
   "main": "index.js",
   "repository": {
