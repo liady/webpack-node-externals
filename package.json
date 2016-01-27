@@ -1,0 +1,32 @@
+{
+  "name": "webpack-node-externals",
+  "version": "1.0.0",
+  "description": "Allows not bundling node_modules in Webpack",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4",
+    "mock-fs": "^3.6.0"
+  },
+  "scripts": {
+    "unit": "mocha --colors ./test/*.spec.js",
+    "unit-watch": "mocha --colors -w ./test/*.spec.js",
+    "test": "npm run unit-watch"
+  },
+  "keywords": [
+    "webpack",
+    "node_modules",
+    "node",
+    "bundle",
+    "externals"
+  ],
+  "author": {
+    "name": "Liad Yosef",
+    "url": "https://github.com/liady"
+  },
+  "license": "MIT"
+}
