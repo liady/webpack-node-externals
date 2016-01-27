@@ -32,22 +32,16 @@ And that's it. All node modules will no longer be bundled but will be left as `r
 This library scans the `node_modules` folder for all node_modules names, and builds an *externals* function that tells Webpack not to bundle those modules, or any sub-modules of theirs.
 
 ### Configuration
-This library accepts an `options` object:
-```js
-var nodeExternals = require('webpack-node-externals');
-// in the webpack config:
-{
-    externals: [nodeExternals(options)]
-}
-```
- * #### `options.whitelist (=[])`
- An array of paths for the `externals` to whitelist, so they **will** be included in the bundle.
+This library accepts an `options` object.
 
- * #### `options.importType (='commonjs')`
- The method in which unbundled modules will be required in the code. Best to leave as `commonjs` for node modules.
+#### `options.whitelist (=[])`
+An array of paths for the `externals` to whitelist, so they **will** be included in the bundle.
 
- * #### `options.modulesDir (='node_modules')`
- The folder in which to search for the node modules.
+#### `options.importType (='commonjs')`
+The method in which unbundled modules will be required in the code. Best to leave as `commonjs` for node modules.
+
+#### `options.modulesDir (='node_modules')`
+The folder in which to search for the node modules.
 
 #### Example
 ```js
