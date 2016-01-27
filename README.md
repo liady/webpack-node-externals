@@ -49,7 +49,7 @@ var nodeExternals = require('webpack-node-externals');
  * #### `options.modulesDir (='node_modules')`
  The folder in which to search for the node modules.
 
- * #### Example
+#### Example
     ```js
     var nodeExternals = require('webpack-node-externals');
     ...
