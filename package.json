@@ -1,10 +1,11 @@
 {
   "name": "webpack-node-externals",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Allows not bundling node_modules in Webpack",
   "main": "index.js",
-  "directories": {
-    "test": "test"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liady/webpack-node-externals.git"
   },
   "dependencies": {},
   "devDependencies": {
@@ -28,5 +29,14 @@
     "name": "Liad Yosef",
     "url": "https://github.com/liady"
   },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js"
+  ],
+  "bugs": {
+    "url": "https://github.com/liady/webpack-node-externals/issues"
+  },
+  "homepage": "https://github.com/liady/webpack-node-externals",
   "license": "MIT"
 }
