@@ -50,19 +50,19 @@ var nodeExternals = require('webpack-node-externals');
  The folder in which to search for the node modules.
 
 #### Example
-    ```js
-    var nodeExternals = require('webpack-node-externals');
+```js
+var nodeExternals = require('webpack-node-externals');
+...
+module.exports = {
     ...
-    module.exports = {
-        ...
-        target: 'node', // important in order not to bundle built-in modules like path, fs, etc.
-        externals: [nodeExternals({
-            whitelist: ['jquery', 'webpack/hot/dev-server']
-            // this WILL include `jquery` and `webpack/hot/dev-server` in the bundle
-        })],
-        ...
-    };
-    ```
+    target: 'node', // important in order not to bundle built-in modules like path, fs, etc.
+    externals: [nodeExternals({
+        whitelist: ['jquery', 'webpack/hot/dev-server']
+        // this WILL include `jquery` and `webpack/hot/dev-server` in the bundle
+    })],
+    ...
+};
+```
     
 For most use cases, the defaults of `importType` and `modulesDir` should be used.
 
