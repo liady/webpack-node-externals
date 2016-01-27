@@ -41,11 +41,11 @@ describe('invocation with a different importType', function() {
     });
 });
 
-// Test ignore list
-describe('honors an ignore list', function() {
+// Test whitelist
+describe('honors a whitelist', function() {
     before(function(){
         mockNodeModules();
-        context.instance = nodeExternals({ignore: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC']});
+        context.instance = nodeExternals({whitelist: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC']});
     });
     it('should invoke a commonjs callback when given an existing module',       buildAssertion(context, 'moduleB', 'commonjs moduleB'));
     it('should invoke a commonjs callback when given an existing sub-module',   buildAssertion(context, 'moduleB/sub-module', 'commonjs moduleB/sub-module'));
