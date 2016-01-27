@@ -4,7 +4,7 @@ Skips bundling node_modules in Webpack
 [![Version](http://img.shields.io/npm/v/webpack-node-externals.svg)](https://www.npmjs.org/package/webpack-node-externals)
 [![Build Status](https://travis-ci.org/liady/webpack-node-externals.svg?branch=master)](https://travis-ci.org/liady/webpack-node-externals)
 
-Webpack allows you to define *externals* - modules that should not be bundled.
+Webpack allows you to define [*externals*](https://webpack.github.io/docs/configuration.html#externals) - modules that should not be bundled.
 
 When bundling with Webpack for the backend - you usually wouldn't want to bundle its node_modules dependencies.
 This library creates an *externals* function that ignores `node_modules` when bundling in Webpack.
