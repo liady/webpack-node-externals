@@ -66,11 +66,6 @@ module.exports = {
     
 For most use cases, the defaults of `importType` and `modulesDir` should be used.
 
-### Test
-```sh
-npm run test
-```
-
 ## Q&A
 #### Why not just use a regex in the Webpack config?
 Webpack allows inserting [regex](https://webpack.github.io/docs/configuration.html#externals) in the *externals* array, to capture non-relative modules:
@@ -85,6 +80,13 @@ Webpack allows inserting [regex](https://webpack.github.io/docs/configuration.ht
 ```
 However, this will leave unbundled **all non-relative requires**, so it does not account for aliases that may be defined in webpack itself.
 This library scans the `node_modules` folder, so it only leaves unbundled the actual node modules that are being used.
+
+## Contribute
+Contributions and pull requests are welcome. Make sure to run the tests to make sure nothing breaks.
+### Test
+```sh
+npm run test
+```
 
 ## License
 MIT
