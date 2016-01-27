@@ -25,6 +25,7 @@ module.exports = {
     ...
 };
 ```
+And that's it. All node modules will no longer be bundled but will be left as `require('module')`.
 
 ## Detailed overview
 ### Description
@@ -56,7 +57,8 @@ var nodeExternals = require('webpack-node-externals');
         ...
         target: 'node', // important in order not to bundle built-in modules like path, fs, etc.
         externals: [nodeExternals({
-            whitelist: ['jquery', 'webpack/hot/dev-server'] // this WILL include `jquery` and `webpack/hot/dev-server` in the bundle
+            whitelist: ['jquery', 'webpack/hot/dev-server']
+            // this WILL include `jquery` and `webpack/hot/dev-server` in the bundle
         })],
         ...
     };
