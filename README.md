@@ -76,7 +76,7 @@ However, this will leave unbundled **all non-relative requires**, so it does not
 This library scans the `node_modules` folder, so it only leaves unbundled the actual node modules that are being used.
 
 ## Contribute
-Contributions and pull requests are welcome. Make sure to run the tests to make sure nothing breaks.
+Contributions and pull requests are welcome. Please run the tests to make sure nothing breaks.
 ### Test
 ```sh
 npm run test
