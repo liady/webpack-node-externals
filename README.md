@@ -7,7 +7,6 @@ Webpack node modules externals
 Webpack allows you to define [*externals*](https://webpack.github.io/docs/configuration.html#externals) - modules that should not be bundled.
 
 When bundling with Webpack for the backend - you usually wouldn't want to bundle its `node_modules` dependencies.
-
 This library creates an *externals* function that ignores `node_modules` when bundling in Webpack.<br/>(Inspired by the great [Backend apps with Webpack](http://jlongster.com/Backend-Apps-with-Webpack--Part-I) series)
 
 ## Quick usage
