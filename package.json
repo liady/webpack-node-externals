@@ -1,7 +1,7 @@
 {
   "name": "webpack-node-externals",
-  "version": "0.4.0",
-  "description": "Allows you not to bundle node_modules in Webpack",
+  "version": "0.4.1",
+  "description": "Easily exclude node_modules in Webpack bundle",
   "main": "index.js",
   "repository": {
     "type": "git",
