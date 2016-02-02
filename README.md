@@ -1,5 +1,6 @@
 Webpack node modules externals
 ==============================
+> Easily exclude node modules in Webpack
 
 [![Version](http://img.shields.io/npm/v/webpack-node-externals.svg)](https://www.npmjs.org/package/webpack-node-externals)
 [![Build Status](https://travis-ci.org/liady/webpack-node-externals.svg?branch=master)](https://travis-ci.org/liady/webpack-node-externals)
