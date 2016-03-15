@@ -2,7 +2,8 @@ Webpack node modules externals
 ==============================
 > Easily exclude node modules in Webpack
 
-[![Version](http://img.shields.io/npm/v/webpack-node-externals.svg)](https://www.npmjs.org/package/webpack-node-externals)
+[![Version](https://img.shields.io/npm/v/webpack-node-externals.svg)](https://www.npmjs.org/package/webpack-node-externals)
+[![Downloads](https://img.shields.io/npm/dm/webpack-node-externals.svg)](https://www.npmjs.org/package/webpack-node-externals)
 [![Build Status](https://travis-ci.org/liady/webpack-node-externals.svg?branch=master)](https://travis-ci.org/liady/webpack-node-externals)
 
 Webpack allows you to define [*externals*](https://webpack.github.io/docs/configuration.html#externals) - modules that should not be bundled.
