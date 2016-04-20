@@ -37,7 +37,7 @@ This library scans the `node_modules` folder for all node_modules names, and bui
 This library accepts an `options` object.
 
 #### `options.whitelist (=[])`
-An array of paths for the `externals` to whitelist, so they **will** be included in the bundle.
+An array of paths for the `externals` to whitelist, so they **will** be included in the bundle. Can accept regex patterns.
 
 #### `options.importType (='commonjs')`
 The method in which unbundled modules will be required in the code. Best to leave as `commonjs` for node modules.
@@ -53,8 +53,8 @@ module.exports = {
     ...
     target: 'node', // important in order not to bundle built-in modules like path, fs, etc.
     externals: [nodeExternals({
-        // this WILL include `jquery` and `webpack/hot/dev-server` in the bundle
-        whitelist: ['jquery', 'webpack/hot/dev-server']
+        // this WILL include `jquery` and `webpack/hot/dev-server` in the bundle, as well as `lodash/*`
+        whitelist: ['jquery', 'webpack/hot/dev-server', /^lodash/]
     })],
     ...
 };

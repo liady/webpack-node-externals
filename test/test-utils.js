@@ -35,6 +35,9 @@ exports.mockNodeModules = function mockNodeModules(structure){
             'sub-module':{}
         },
         'moduleC' : {},
+        'moduleD' : {
+            'sub-module':{}
+        },
     };
     mockDir({'node_modules' : structure});
 }
