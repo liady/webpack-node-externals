@@ -37,9 +37,21 @@ exports.mockNodeModules = function mockNodeModules(structure){
         'moduleC' : {},
         'moduleD' : {
             'sub-module':{}
-        },
+        }
     };
-    mockDir({'node_modules' : structure});
+
+    mockDir({
+        'node_modules' : structure,
+        'package.json': JSON.stringify({
+            dependencies: {
+                'moduleE': '1.0.0',
+                'moduleF': '1.0.0',
+            },
+            devDependencies: {
+                'moduleG': '1.0.0'
+            },            
+        })
+    });
 }
 
 /**

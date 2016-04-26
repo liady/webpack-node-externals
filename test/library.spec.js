@@ -22,6 +22,7 @@ describe('invocation with no settings', function() {
 
     describe('should invoke an empty callback', function(){
         it('when given a non-node module', assertResult('non-node-module', undefined));
+        it('when given a module in the file but not in folder', assertResult('moduleE', undefined));
         it('when given a relative path', assertResult('./src/index.js', undefined));
     });
 
@@ -47,6 +48,30 @@ describe('invocation with a different importType', function() {
 
     describe('should invoke an empty callback', function(){
         it('when given a non-node module', assertResult('non-node-module', undefined));
+        it('when given a relative path', assertResult('./src/index.js', undefined));
+    });
+
+    after(function(){
+        restoreMock()
+    });
+});
+
+// Test reading from file
+describe('reads from a file', function() {
+
+    before(function(){
+        mockNodeModules();
+        context.instance = nodeExternals({modulesFromFile: true});
+    });
+
+    describe('should invoke a commonjs callback', function(){
+        it('when given an existing module in the file', assertResult('moduleE', 'commonjs moduleE'));
+        it('when given an existing file in a sub-module', assertResult('moduleG/another-sub/index.js', 'commonjs moduleG/another-sub/index.js'));
+    });
+
+    describe('should invoke an empty callback', function(){
+        it('when given a non-node module', assertResult('non-node-module', undefined));
+        it('when given a module in the folder but not in the file', assertResult('moduleA', undefined));
         it('when given a relative path', assertResult('./src/index.js', undefined));
     });
 

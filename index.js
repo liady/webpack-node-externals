@@ -4,12 +4,29 @@ function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
 }
 
-function readDir(dirName){
+function readDir(dirName) {
     try {
         return fs.readdirSync(dirName);
     } catch (e){
         return [];
     }
+}
+
+function readFromPackageJson() {
+    var packageJson;
+    try {
+        packageJson = require('./package.json');
+    } catch (e){
+        return [];
+    }
+    var sections = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+    var deps = {};
+    sections.forEach(function(section){
+        Object.keys(packageJson[section] || {}).forEach(function(dep){
+            deps[dep] = true;
+        });
+    });
+    return Object.keys(deps);
 }
 
 function containsPattern(arr, val) {
@@ -28,6 +45,7 @@ module.exports = function nodeExternals(options) {
     var binaryDirs = [].concat(options.binaryDirs || ['.bin']);
     var importType = options.importType || 'commonjs';
     var modulesDir = options.modulesDir || 'node_modules';
+    var modulesFromFile = !!options.modulesFromFile;
 
     // helper function
     function isNotBinary(x) {
@@ -35,7 +53,7 @@ module.exports = function nodeExternals(options) {
     }
 
     // create the node modules list
-    var nodeModules = readDir(modulesDir).filter(isNotBinary);
+    var nodeModules = modulesFromFile ? readFromPackageJson(): readDir(modulesDir).filter(isNotBinary);
 
     // return an externals function
     return function(context, request, callback) {
