@@ -5,6 +5,7 @@ node_js:
   - "0.10"
   - "0.12"
   - "iojs"
+  - "node"
 env:
   - TEST_SUITE=unit
 script: 
