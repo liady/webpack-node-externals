@@ -1,4 +1,5 @@
 var fs = require("fs");
+var path = require("path");
 
 function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
@@ -57,7 +58,8 @@ module.exports = function nodeExternals(options) {
 
     // return an externals function
     return function(context, request, callback) {
-        var pathStart = request.split('/')[0];
+        var req = (path.isAbsolute(request) && request.indexOf(modulesDir) > 0) ? request.split(modulesDir + '/')[1] : request;
+        var pathStart = req.split('/')[0];
         if (contains(nodeModules, pathStart) && !containsPattern(whitelist, request)) {
             // mark this module as external
             // https://webpack.github.io/docs/configuration.html#externals
