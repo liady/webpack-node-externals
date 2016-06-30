@@ -18,12 +18,16 @@ describe('invocation with no settings', function() {
         it('when given another existing module', assertResult('moduleB', 'commonjs moduleB'));
         it('when given an existing sub-module', assertResult('moduleA/sub-module', 'commonjs moduleA/sub-module'));
         it('when given an existing file in a sub-module', assertResult('moduleA/another-sub/index.js', 'commonjs moduleA/another-sub/index.js'));
+        it('when given an absolute path', assertResult('/test/node_modules/moduleA', 'commonjs /test/node_modules/moduleA'));
+        it('when given an existing sub-module inside node_modules', assertResult('/moduleA/node_modules/moduleB', 'commonjs /moduleA/node_modules/moduleB'));
     });
 
     describe('should invoke an empty callback', function(){
         it('when given a non-node module', assertResult('non-node-module', undefined));
         it('when given a module in the file but not in folder', assertResult('moduleE', undefined));
         it('when given a relative path', assertResult('./src/index.js', undefined));
+        it('when given a different absolute path', assertResult('/test/node_modules/non-node-module', undefined));
+        it('when given a complex different absolute path', assertResult('/test/node_modules/non-node-module/node_modules/moduleA', undefined));
     });
 
     after(function(){

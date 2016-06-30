@@ -39,6 +39,14 @@ function containsPattern(arr, val) {
     });
 }
 
+function getModuleName(request, modulesDir) {
+    var req = request;
+    // in case absolute, strip all parts before */modulesDir/
+    req = req.replace(/^\/.*?node_modules\//, '');
+    // return the module name
+    return req.split('/')[0];
+}
+
 module.exports = function nodeExternals(options) {
     options = options || {};
     var whitelist = [].concat(options.whitelist || []);
@@ -53,12 +61,12 @@ module.exports = function nodeExternals(options) {
     }
 
     // create the node modules list
-    var nodeModules = modulesFromFile ? readFromPackageJson(): readDir(modulesDir).filter(isNotBinary);
+    var nodeModules = modulesFromFile ? readFromPackageJson() : readDir(modulesDir).filter(isNotBinary);
 
     // return an externals function
     return function(context, request, callback) {
-        var pathStart = request.split('/')[0];
-        if (contains(nodeModules, pathStart) && !containsPattern(whitelist, request)) {
+        var moduleName = getModuleName(request);
+        if (contains(nodeModules, moduleName) && !containsPattern(whitelist, request)) {
             // mark this module as external
             // https://webpack.github.io/docs/configuration.html#externals
             return callback(null, importType + " " + request);
