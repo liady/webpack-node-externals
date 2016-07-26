@@ -15,7 +15,7 @@ function readDir(dirName) {
 function readFromPackageJson() {
     var packageJson;
     try {
-        packageJson = require('./package.json');
+        packageJson = require(process.cwd() + '/package.json');
     } catch (e){
         return [];
     }
