@@ -11,7 +11,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
-    "mock-fs": "3.6.0"
+    "mock-fs": "^3.10.0"
   },
   "scripts": {
     "unit": "mocha --colors ./test/*.spec.js",
