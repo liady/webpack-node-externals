@@ -65,7 +65,7 @@ module.exports = function nodeExternals(options) {
 
     // return an externals function
     return function(context, request, callback) {
-        var moduleName = getModuleName(request);
+        var moduleName = options.includeAbsolutePaths ? getModuleName(request) : request.split('/')[0];
         if (contains(nodeModules, moduleName) && !containsPattern(whitelist, request)) {
             // mark this module as external
             // https://webpack.github.io/docs/configuration.html#externals

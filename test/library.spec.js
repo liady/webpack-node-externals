@@ -10,7 +10,9 @@ describe('invocation with no settings', function() {
 
     before(function(){
         mockNodeModules();
-        context.instance = nodeExternals();
+        context.instance = nodeExternals({
+            includeAbsolutePaths: true
+        });
     });
 
     describe('should invoke a commonjs callback', function(){
