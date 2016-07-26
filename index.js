@@ -1,4 +1,5 @@
 var fs = require("fs");
+var path = require("path");
 
 function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
@@ -15,7 +16,7 @@ function readDir(dirName) {
 function readFromPackageJson() {
     var packageJson;
     try {
-        packageJson = require('./package.json');
+        packageJson = require(path.join(process.cwd(), './package.json'));
     } catch (e){
         return [];
     }
