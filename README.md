@@ -38,6 +38,7 @@ This library accepts an `options` object.
 
 #### `options.whitelist (=[])`
 An array of paths for the `externals` to whitelist, so they **will** be included in the bundle. Can accept exact strings (`'module_name'`) or regex patterns (`/module_name.*/`).
+<br/>**Important** - if you have set aliases in your webpack config with the exact same names as modules in *node_modules*, you need to whitelist them so Webpack will know they should be bundled.
 
 #### `options.importType (='commonjs')`
 The method in which unbundled modules will be required in the code. Best to leave as `commonjs` for node modules.
