@@ -37,7 +37,7 @@ This library scans the `node_modules` folder for all node_modules names, and bui
 This library accepts an `options` object.
 
 #### `options.whitelist (=[])`
-An array of paths for the `externals` to whitelist, so they **will** be included in the bundle. Can accept exact strings (`'module_name'`) or regex patterns (`/module_name.*/`).
+An array of paths for the `externals` to whitelist, so they **will** be included in the bundle. Can accept exact strings (`'module_name'`) or regex patterns (`/^module_name/`).
 <br/>**Important** - if you have set aliases in your webpack config with the exact same names as modules in *node_modules*, you need to whitelist them so Webpack will know they should be bundled.
 
 #### `options.importType (='commonjs')`
