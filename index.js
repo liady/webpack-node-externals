@@ -21,13 +21,15 @@ function readFromPackageJson() {
         return [];
     }
     var sections = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
-    var deps = {};
-    sections.forEach(function(section){
-        Object.keys(packageJson[section] || {}).forEach(function(dep){
-            deps[dep] = true;
-        });
-    });
-    return Object.keys(deps);
+    var deps = sections
+      .map(function(section){
+        return Object.keys(packageJson[section] || {});
+      })
+      .reduce(function(allDeps, depsInSection){
+        return allDeps.concat(depsInSection);
+      }, []);
+
+    return deps;
 }
 
 function containsPattern(arr, val) {
