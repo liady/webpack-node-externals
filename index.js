@@ -21,14 +21,12 @@ function readFromPackageJson() {
         return [];
     }
     var sections = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
-    var deps = sections
-      .map(function(section){
-        return Object.keys(packageJson[section] || {});
-      })
-      .reduce(function(allDeps, depsInSection){
-        return allDeps.concat(depsInSection);
-      }, []);
+    var deps = [];
+    sections.forEach(function(section){
+      var packages = Object.keys(packageJson[section] || {});
 
+      deps = deps.concat(packages);
+    });
     return deps;
 }
 
