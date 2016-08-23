@@ -90,7 +90,9 @@ describe('honors a whitelist', function() {
     before(function(){
         mockNodeModules();
         context.instance = nodeExternals({
-            whitelist: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC', /^moduleD/]
+            whitelist: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC', function (m) {
+                return m == 'moduleF';
+            }, /^moduleD/]
         });
     });
 
@@ -99,10 +101,12 @@ describe('honors a whitelist', function() {
         it('when given an existing sub-module', assertResult('moduleB/sub-module', 'commonjs moduleB/sub-module'));
         it('when given a module which is the parent on an ignored path', assertResult('moduleA', 'commonjs moduleA'));
         it('when given a sub-module of an ignored module', assertResult('moduleC/sub-module', 'commonjs moduleC/sub-module'));
+        it('when given a sub-module of an module ignored by a function', assertResult('moduleF/sub-module', 'commonjs moduleF/sub-module'));
     });
 
     describe('should invoke an empty callback', function(){
-        it('when given an ignored module path', assertResult('moduleC', undefined));
+        it('when given module path ignored by a function', assertResult('moduleC', undefined));
+        it('when given an ignored module path', assertResult('moduleF', undefined));
         it('when given an ignored sub-module path', assertResult('moduleA/sub-module', undefined));
         it('when given an ignored file path', assertResult('moduleA/another-sub/index.js', undefined));
         it('when given an ignored regex path', assertResult('moduleD', undefined));
