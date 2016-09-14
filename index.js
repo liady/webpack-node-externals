@@ -43,7 +43,7 @@ function containsPattern(arr, val) {
 function getModuleName(request, modulesDir) {
     var req = request;
     // in case absolute, strip all parts before */modulesDir/
-    req = req.replace(/^\/.*?node_modules\//, '');
+    req = req.replace(/^.*?\/node_modules\//, '');
     // return the module name
     return req.split('/')[0];
 }
