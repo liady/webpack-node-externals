@@ -81,6 +81,18 @@ Webpack allows inserting [regex](https://webpack.github.io/docs/configuration.ht
 However, this will leave unbundled **all non-relative requires**, so it does not account for aliases that may be defined in webpack itself.
 This library scans the `node_modules` folder, so it only leaves unbundled the actual node modules that are being used.
 
+#### How can I bundle required assets (i.e css files) from node_modules?
+Using the `whitelist` option, this is possible. We can simply tell Webpack to bundle all files with extensions that are not js/jsx/json, using this [regex](https://regexper.com/#%5C.(%3F!(%3F%3Ajs%7Cjson)%24).%7B1%2C5%7D%24):
+```js
+...
+nodeExternals({
+  // load non-javascript files with extensions, presumably via loaders
+  whitelist: [/\.(?!(?:jsx?|json)$).{1,5}$/i],
+}),
+...
+```
+Thanks @wmertens for this idea.
+
 ## Contribute
 Contributions and pull requests are welcome. Please run the tests to make sure nothing breaks.
 ### Test
