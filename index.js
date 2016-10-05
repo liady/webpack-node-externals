@@ -34,6 +34,8 @@ function containsPattern(arr, val) {
     return arr && arr.some(function(pattern){
         if(pattern instanceof RegExp){
             return pattern.test(val);
+        } else if (typeof pattern === 'function') {
+            return pattern(val);
         } else {
             return pattern == val;
         }
