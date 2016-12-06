@@ -4,6 +4,8 @@ before_install:
 node_js:
   - "0.12"
   - "iojs"
+  - 5
+  - 6
   - "node"
 env:
   - TEST_SUITE=unit
