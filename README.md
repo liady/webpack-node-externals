@@ -93,6 +93,17 @@ nodeExternals({
 ```
 Thanks @wmertens for this idea.
 
+#### Why is not bundling node_modules a good thing?
+
+When writing a node library, for instance, you may want to split your code to several files, and use Webpack to bundle them. However - you wouldn't want to bundle your code with its entire node_modules dependencies, for two reasons:
+
+1. It will bloat your library on npm.
+2. It goes against the entire npm dependencies management. If you're using Lodash, and the consumer of your library also has the same Lodash dependency, npm makes sure that it will be added only once. But bundling Lodash in your library will actually make it included twice, since npm is no longer managing this dependency.
+
+As a consumer of a library, I want the library code to include only its logic, and just state its dependencies so they could me merged/resolved with the rest of the dependencies in my project. Bundling your code with your dependencies makes it virtually impossible.
+
+In short: **It's useful if your code is used by something that has dependencies managed by npm**
+
 ## Contribute
 Contributions and pull requests are welcome. Please run the tests to make sure nothing breaks.
 ### Test
