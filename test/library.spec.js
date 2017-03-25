@@ -16,6 +16,7 @@ describe('invocation with no settings', function() {
     describe('should invoke a commonjs callback', function(){
         it('when given an existing module', assertResult('moduleA', 'commonjs moduleA'));
         it('when given another existing module', assertResult('moduleB', 'commonjs moduleB'));
+        it('when given another existing module for scoped package', assertResult('@organisation/moduleA', 'commonjs @organisation/moduleA'));
         it('when given an existing sub-module', assertResult('moduleA/sub-module', 'commonjs moduleA/sub-module'));
         it('when given an existing file in a sub-module', assertResult('moduleA/another-sub/index.js', 'commonjs moduleA/another-sub/index.js'));
     });
@@ -133,10 +134,12 @@ describe('invocation with an absolute path setting', function() {
     describe('should invoke a commonjs callback', function(){
         it('when given an existing module', assertResult('moduleA', 'commonjs moduleA'));
         it('when given another existing module', assertResult('moduleB', 'commonjs moduleB'));
+        it('when given another existing module for scoped package', assertResult('@organisation/moduleA', 'commonjs @organisation/moduleA'));
         it('when given an existing sub-module', assertResult('moduleA/sub-module', 'commonjs moduleA/sub-module'));
         it('when given an existing file in a sub-module', assertResult('moduleA/another-sub/index.js', 'commonjs moduleA/another-sub/index.js'));
         it('when given an absolute path', assertResult('/test/node_modules/moduleA', 'commonjs /test/node_modules/moduleA'));
         it('when given another absolute path', assertResult('../../test/node_modules/moduleA', 'commonjs ../../test/node_modules/moduleA'));
+        it('when given another absolute path for scoped package', assertResult('/test/node_modules/@organisation/moduleA', 'commonjs /test/node_modules/@organisation/moduleA'));
         it('when given an existing sub-module inside node_modules', assertResult('/moduleA/node_modules/moduleB', 'commonjs /moduleA/node_modules/moduleB'));
     });
 
