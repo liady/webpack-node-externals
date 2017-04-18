@@ -1,6 +1,8 @@
 var fs = require("fs");
 var path = require("path");
 
+var scopedModuleRegex = new RegExp('@[a-z0-9][\\w-.]+/[a-z0-9][\\w-.]*', 'gi')
+
 function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
 }
@@ -42,10 +44,18 @@ function containsPattern(arr, val) {
     });
 }
 
-function getModuleName(request, modulesDir) {
+function getModuleName(request, includeAbsolutePaths) {
     var req = request;
-    // in case absolute, strip all parts before */modulesDir/
-    req = req.replace(/^.*?\/node_modules\//, '');
+
+    if (includeAbsolutePaths) {
+      req = req.replace(/^.*?\/node_modules\//, '');
+    }
+
+    // check if scoped module
+    if (scopedModuleRegex.test(req)) {
+      return req
+    }
+
     // return the module name
     return req.split('/')[0];
 }
@@ -57,6 +67,7 @@ module.exports = function nodeExternals(options) {
     var importType = options.importType || 'commonjs';
     var modulesDir = options.modulesDir || 'node_modules';
     var modulesFromFile = !!options.modulesFromFile;
+    var includeAbsolutePaths = !!options.includeAbsolutePaths
 
     // helper function
     function isNotBinary(x) {
@@ -68,7 +79,7 @@ module.exports = function nodeExternals(options) {
 
     // return an externals function
     return function(context, request, callback) {
-        var moduleName = options.includeAbsolutePaths ? getModuleName(request) : request.split('/')[0];
+        var moduleName = getModuleName(request, includeAbsolutePaths)
         if (contains(nodeModules, moduleName) && !containsPattern(whitelist, request)) {
             // mark this module as external
             // https://webpack.github.io/docs/configuration.html#externals
