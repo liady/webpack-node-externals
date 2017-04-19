@@ -54,9 +54,11 @@ exports.mockNodeModules = function mockNodeModules(structure){
             dependencies: {
                 'moduleE': '1.0.0',
                 'moduleF': '1.0.0',
+                '@organisation/moduleE': '1.0.0',
             },
             devDependencies: {
-                'moduleG': '1.0.0'
+                'moduleG': '1.0.0',
+                '@organisation/moduleG': '1.0.0',
             },            
         })
     });

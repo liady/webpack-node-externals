@@ -1,7 +1,7 @@
 var fs = require("fs");
 var path = require("path");
 
-var scopedModuleRegex = new RegExp('@[a-z0-9][\\w-.]+/[a-z0-9][\\w-.]*', 'gi')
+var scopedModuleRegex = new RegExp('@[a-z0-9][\\w-.]+/[a-z0-9][\\w-.]+([/A-Z0-9.]+)?', 'gi')
 
 function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
@@ -29,6 +29,7 @@ function readFromPackageJson() {
             deps[dep] = true;
         });
     });
+    console.log(Object.keys(deps));
     return Object.keys(deps);
 }
 
@@ -46,18 +47,21 @@ function containsPattern(arr, val) {
 
 function getModuleName(request, includeAbsolutePaths) {
     var req = request;
+    var delimiter = '/';
 
     if (includeAbsolutePaths) {
       req = req.replace(/^.*?\/node_modules\//, '');
     }
-
+    console.log(req);
     // check if scoped module
     if (scopedModuleRegex.test(req)) {
-      return req
+            console.log(req);
+
+      return req.split(delimiter, 2).join(delimiter);
     }
 
     // return the module name
-    return req.split('/')[0];
+    return req.split(delimiter)[0];
 }
 
 module.exports = function nodeExternals(options) {
