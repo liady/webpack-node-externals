@@ -1,16 +1,30 @@
-var fs = require("fs");
-var path = require("path");
+const fs = require("fs");
+const path = require("path");
 
-var scopedModuleRegex = new RegExp('@[a-z0-9][\\w-.]+/[a-z0-9][\\w-.]+([/A-Z0-9.]+)?', 'gi')
-
+var scopedModuleRegex = new RegExp('@[a-zA-Z0-9][\\w-.]+\/[a-zA-Z0-9][\\w-.]+([a-zA-Z0-9.\/]+)?', 'g');
+var atPrefix = new RegExp('^@', 'g');
 function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
 }
 
 function readDir(dirName) {
     try {
-        return fs.readdirSync(dirName);
-    } catch (e){
+        return fs.readdirSync(dirName).map(module => {
+            if (atPrefix.test(module)) {
+                // reset regexp
+                atPrefix.lastIndex = 0;
+                try {
+                    return fs.readdirSync(path.join(dirName, module)).map(scopedMod => {
+                        return module + '/' + scopedMod;
+                    });
+                } catch (e) {
+                    return [module];
+                }
+            }
+            return module
+        }).reduce((prev, next) => Array.isArray(next) ? [...prev, ...next] : [...prev, next], [])
+    } catch (e) {
+        console.log(e);
         return [];
     }
 }
@@ -19,23 +33,22 @@ function readFromPackageJson() {
     var packageJson;
     try {
         packageJson = require(path.join(process.cwd(), './package.json'));
-    } catch (e){
+    } catch (e) {
         return [];
     }
     var sections = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
     var deps = {};
-    sections.forEach(function(section){
-        Object.keys(packageJson[section] || {}).forEach(function(dep){
+    sections.forEach(function (section) {
+        Object.keys(packageJson[section] || {}).forEach(function (dep) {
             deps[dep] = true;
         });
     });
-    console.log(Object.keys(deps));
     return Object.keys(deps);
 }
 
 function containsPattern(arr, val) {
-    return arr && arr.some(function(pattern){
-        if(pattern instanceof RegExp){
+    return arr && arr.some(function (pattern) {
+        if (pattern instanceof RegExp) {
             return pattern.test(val);
         } else if (typeof pattern === 'function') {
             return pattern(val);
@@ -47,20 +60,17 @@ function containsPattern(arr, val) {
 
 function getModuleName(request, includeAbsolutePaths) {
     var req = request;
-    var delimiter = '/';
+    const delimiter = '/';
 
     if (includeAbsolutePaths) {
-      req = req.replace(/^.*?\/node_modules\//, '');
+        req = req.replace(/^.*?\/node_modules\//, '');
     }
-    console.log(req);
     // check if scoped module
     if (scopedModuleRegex.test(req)) {
-            console.log(req);
-
-      return req.split(delimiter, 2).join(delimiter);
+        // reset regexp
+        scopedModuleRegex.lastIndex = 0;
+        return req.split(delimiter, 2).join(delimiter);
     }
-
-    // return the module name
     return req.split(delimiter)[0];
 }
 
@@ -82,7 +92,7 @@ module.exports = function nodeExternals(options) {
     var nodeModules = modulesFromFile ? readFromPackageJson() : readDir(modulesDir).filter(isNotBinary);
 
     // return an externals function
-    return function(context, request, callback) {
+    return function (context, request, callback) {
         var moduleName = getModuleName(request, includeAbsolutePaths)
         if (contains(nodeModules, moduleName) && !containsPattern(whitelist, request)) {
             // mark this module as external

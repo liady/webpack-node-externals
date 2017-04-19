@@ -20,6 +20,8 @@ describe('invocation with no settings', function () {
         it('when given an existing sub-module', assertResult('moduleA/sub-module', 'commonjs moduleA/sub-module'));
         it('when given an existing file in a sub-module', assertResult('moduleA/another-sub/index.js', 'commonjs moduleA/another-sub/index.js'));
         it('when given an existing file in a scoped package', assertResult('@organisation/moduleA/index.js', 'commonjs @organisation/moduleA/index.js'))
+        it('when given an another existing file in a scoped package', assertResult('@organisation/base-node/vs/base/common/paths', 'commonjs @organisation/base-node/vs/base/common/paths'))
+
     });
 
     describe('should invoke an empty callback', function () {

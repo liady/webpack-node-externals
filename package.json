@@ -1,6 +1,6 @@
 {
   "name": "cdm-webpack-node-externals",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "Easily exclude node_modules in Webpack bundle",
   "main": "index.js",
   "repository": {
@@ -13,7 +13,7 @@
     "mocha": "^2.5.3",
     "mock-fs": "3.10.0",
     "ncp": "^2.0.0",
-    "webpack": "^1.13.1"
+    "webpack": "^2.4.1"
   },
   "scripts": {
     "unit": "mocha --colors ./test/*.spec.js",
