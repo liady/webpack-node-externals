@@ -1,14 +1,32 @@
 var fs = require("fs");
 var path = require("path");
 
+var scopedModuleRegex = new RegExp('@[a-zA-Z0-9][\\w-.]+\/[a-zA-Z0-9][\\w-.]+([a-zA-Z0-9.\/]+)?', 'g');
+var atPrefix = new RegExp('^@', 'g');
 function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
 }
 
 function readDir(dirName) {
     try {
-        return fs.readdirSync(dirName);
-    } catch (e){
+        return fs.readdirSync(dirName).map(function(module) {
+            if (atPrefix.test(module)) {
+                // reset regexp
+                atPrefix.lastIndex = 0;
+                try {
+                    return fs.readdirSync(path.join(dirName, module)).map(function(scopedMod) {
+                        return module + '/' + scopedMod;
+                    });
+                } catch (e) {
+                    return [module];
+                }
+            }
+            return module
+        }).reduce(function(prev, next) {
+            return Array.isArray(next) ? [...prev, ...next] : [...prev, next];
+        }, []);
+    } catch (e) {
+        console.log(e);
         return [];
     }
 }
@@ -42,12 +60,20 @@ function containsPattern(arr, val) {
     });
 }
 
-function getModuleName(request, modulesDir) {
+function getModuleName(request, includeAbsolutePaths) {
     var req = request;
-    // in case absolute, strip all parts before */modulesDir/
-    req = req.replace(/^.*?\/node_modules\//, '');
-    // return the module name
-    return req.split('/')[0];
+    var delimiter = '/';
+
+    if (includeAbsolutePaths) {
+        req = req.replace(/^.*?\/node_modules\//, '');
+    }
+    // check if scoped module
+    if (scopedModuleRegex.test(req)) {
+        // reset regexp
+        scopedModuleRegex.lastIndex = 0;
+        return req.split(delimiter, 2).join(delimiter);
+    }
+    return req.split(delimiter)[0];
 }
 
 module.exports = function nodeExternals(options) {
@@ -57,6 +83,7 @@ module.exports = function nodeExternals(options) {
     var importType = options.importType || 'commonjs';
     var modulesDir = options.modulesDir || 'node_modules';
     var modulesFromFile = !!options.modulesFromFile;
+    var includeAbsolutePaths = !!options.includeAbsolutePaths
 
     // helper function
     function isNotBinary(x) {
@@ -67,8 +94,8 @@ module.exports = function nodeExternals(options) {
     var nodeModules = modulesFromFile ? readFromPackageJson() : readDir(modulesDir).filter(isNotBinary);
 
     // return an externals function
-    return function(context, request, callback) {
-        var moduleName = options.includeAbsolutePaths ? getModuleName(request) : request.split('/')[0];
+    return function(context, request, callback){
+        var moduleName = getModuleName(request, includeAbsolutePaths)
         if (contains(nodeModules, moduleName) && !containsPattern(whitelist, request)) {
             // mark this module as external
             // https://webpack.github.io/docs/configuration.html#externals
