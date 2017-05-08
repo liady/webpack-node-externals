@@ -23,7 +23,7 @@ function readDir(dirName) {
             }
             return module
         }).reduce(function(prev, next) {
-            return Array.isArray(next) ? [...prev, ...next] : [...prev, next];
+            return prev.concat(next);
         }, []);
     } catch (e) {
         console.log(e);
