@@ -96,7 +96,7 @@ describe('reads from a file', function() {
 });
 
 // Test whitelist
-describe('honors a whitelist', function() {
+describe('respects a whitelist', function() {
 
     before(function(){
         mockNodeModules();

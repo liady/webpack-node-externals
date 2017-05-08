@@ -34,7 +34,8 @@ function readDir(dirName) {
 function readFromPackageJson() {
     var packageJson;
     try {
-        packageJson = require(path.join(process.cwd(), './package.json'));
+        var packageJsonString = fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf8');
+        packageJson = JSON.parse(packageJsonString);
     } catch (e){
         return [];
     }
@@ -83,7 +84,7 @@ module.exports = function nodeExternals(options) {
     var importType = options.importType || 'commonjs';
     var modulesDir = options.modulesDir || 'node_modules';
     var modulesFromFile = !!options.modulesFromFile;
-    var includeAbsolutePaths = !!options.includeAbsolutePaths
+    var includeAbsolutePaths = !!options.includeAbsolutePaths;
 
     // helper function
     function isNotBinary(x) {
@@ -95,7 +96,7 @@ module.exports = function nodeExternals(options) {
 
     // return an externals function
     return function(context, request, callback){
-        var moduleName = getModuleName(request, includeAbsolutePaths)
+        var moduleName = getModuleName(request, includeAbsolutePaths);
         if (contains(nodeModules, moduleName) && !containsPattern(whitelist, request)) {
             // mark this module as external
             // https://webpack.github.io/docs/configuration.html#externals

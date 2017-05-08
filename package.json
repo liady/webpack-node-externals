@@ -11,7 +11,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
-    "mock-fs": "3.10.0",
+    "mock-fs-require-fix": "^1.0.1",
     "ncp": "^2.0.0",
     "webpack": "^1.13.1"
   },
