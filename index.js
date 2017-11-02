@@ -82,7 +82,10 @@ module.exports = function nodeExternals(options) {
     var whitelist = [].concat(options.whitelist || []);
     var binaryDirs = [].concat(options.binaryDirs || ['.bin']);
     var importType = options.importType || 'commonjs';
+    // `modulesDir` is kept for Backward compatibility as
+    // it can be replaced by modulesDirs = ['node_modules']
     var modulesDir = options.modulesDir || 'node_modules';
+    var modulesDirs = options.modulesDirs || [modulesDir];
     var modulesFromFile = !!options.modulesFromFile;
     var includeAbsolutePaths = !!options.includeAbsolutePaths;
 
@@ -92,7 +95,9 @@ module.exports = function nodeExternals(options) {
     }
 
     // create the node modules list
-    var nodeModules = modulesFromFile ? readFromPackageJson() : readDir(modulesDir).filter(isNotBinary);
+    var nodeModules = modulesFromFile ? readFromPackageJson() : modulesDirs.reduce(
+      function (dirs, dir) { return dirs.concat(readDir(dir).filter(isNotBinary))}, []
+    );
 
     // return an externals function
     return function(context, request, callback){

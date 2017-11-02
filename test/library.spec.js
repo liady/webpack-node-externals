@@ -1,6 +1,7 @@
 var nodeExternals = require('../index.js');
 var testUtils = require('./test-utils.js');
 var mockNodeModules = testUtils.mockNodeModules;
+var getDefaultNodeModulesStructure = testUtils.getDefaultNodeModulesStructure;
 var restoreMock = testUtils.restoreMock;
 var context={};
 var assertResult = testUtils.buildAssertion.bind(null, context);
@@ -166,6 +167,52 @@ describe('invocation with an absolute path setting', function() {
         it('when given another complex different absolute path', assertResult('../../node_modules/non-node-module/node_modules/moduleA', undefined));
         it('when given another complex different absolute path for scoped package', assertResult('../../node_modules/non-node-module/node_modules/@organisation/moduleA', undefined));
 
+    });
+
+    after(function(){
+        restoreMock()
+    });
+});
+
+// Test modulesDirs support
+describe('invocation with modulesDirs settings', function() {
+
+    before(function(){
+        var nodeModulesStructure = getDefaultNodeModulesStructure();
+        var otherNodeModulesStructure = {
+          'moduleB': nodeModulesStructure['moduleB']
+        }
+
+        delete nodeModulesStructure['moduleB'];
+        mockNodeModules({
+          'node_modules': nodeModulesStructure,
+          'other_node_modules': otherNodeModulesStructure
+        });
+
+        context.instance = nodeExternals({
+          modulesDirs: ['node_modules', 'other_node_modules']
+        });
+    });
+
+    describe('should invoke a commonjs callback', function(){
+        it('when given an existing module', assertResult('moduleA', 'commonjs moduleA'));
+        it('when given another existing module', assertResult('moduleB', 'commonjs moduleB'));
+        it('when given another existing module for scoped package', assertResult('@organisation/moduleA', 'commonjs @organisation/moduleA'));
+        it('when given an existing sub-module', assertResult('moduleA/sub-module', 'commonjs moduleA/sub-module'));
+        it('when given an existing file in a sub-module', assertResult('moduleA/another-sub/index.js', 'commonjs moduleA/another-sub/index.js'));
+        it('when given an existing file in a scoped package', assertResult('@organisation/moduleA/index.js', 'commonjs @organisation/moduleA/index.js'))
+        it('when given an another existing file in a scoped package', assertResult('@organisation/base-node/vs/base/common/paths', 'commonjs @organisation/base-node/vs/base/common/paths'))
+
+    });
+
+    describe('should invoke an empty callback', function(){
+        it('when given a non-node module', assertResult('non-node-module', undefined));
+        it('when given a module in the file but not in folder', assertResult('moduleE', undefined));
+        it('when given a relative path', assertResult('./src/index.js', undefined));
+        it('when given a different absolute path', assertResult('/test/node_modules/non-node-module', undefined));
+        it('when given a complex different absolute path', assertResult('/test/node_modules/non-node-module/node_modules/moduleA', undefined));
+        it('when given an absolute path', assertResult('/test/node_modules/moduleA', undefined));
+        it('when given an existing sub-module inside node_modules', assertResult('/moduleA/node_modules/moduleB', undefined));
     });
 
     after(function(){

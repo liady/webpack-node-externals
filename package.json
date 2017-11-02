@@ -13,7 +13,8 @@
     "mocha": "^2.5.3",
     "mock-fs-require-fix": "^1.0.1",
     "ncp": "^2.0.0",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "clone": "^2.1.1"
   },
   "scripts": {
     "unit": "mocha --colors ./test/*.spec.js",

@@ -1,4 +1,5 @@
 var mockDir = require('mock-fs-require-fix');
+var clone = require('clone');
 var nodeExternals = require('../index.js');
 var webpack = require('webpack');
 var fs = require('fs');
@@ -24,6 +25,29 @@ exports.buildAssertion = function buildAssertion(context, moduleName, expectedRe
     };
 }
 
+const defaultNodeModulesStructure = {
+  'moduleA' : {
+      'sub-module':{},
+      'another-sub':{
+          'index.js' : ''
+      },
+  },
+  'moduleB' : {
+      'sub-module':{}
+  },
+  'moduleC' : {},
+  'moduleD' : {
+      'sub-module':{}
+  },
+  'moduleF' : {},
+  '@organisation/moduleA':{},
+  '@organisation/base-node':{},
+};
+
+exports.getDefaultNodeModulesStructure = function() {
+  return clone(defaultNodeModulesStructure);
+};
+
 /**
  * Mocks the fs module to output a desired structure
  * @param  {object} structure       the requested structure
@@ -31,38 +55,22 @@ exports.buildAssertion = function buildAssertion(context, moduleName, expectedRe
  */
 exports.mockNodeModules = function mockNodeModules(structure){
     structure = structure || {
-        'moduleA' : {
-            'sub-module':{},
-            'another-sub':{
-                'index.js' : ''
-            },
-        },
-        'moduleB' : {
-            'sub-module':{}
-        },
-        'moduleC' : {},
-        'moduleD' : {
-            'sub-module':{}
-        },
-        'moduleF' : {},
-        '@organisation/moduleA':{},
-        '@organisation/base-node':{},
+      'node_modules': defaultNodeModulesStructure,
     };
 
-    mockDir({
-        'node_modules' : structure,
-        'package.json': JSON.stringify({
-            dependencies: {
-                'moduleE': '1.0.0',
-                'moduleF': '1.0.0',
-                '@organisation/moduleE': '1.0.0',
-            },
-            devDependencies: {
-                'moduleG': '1.0.0',
-                '@organisation/moduleG': '1.0.0',
-            },            
-        })
+    structure['package.json'] = JSON.stringify({
+      dependencies: {
+          'moduleE': '1.0.0',
+          'moduleF': '1.0.0',
+          '@organisation/moduleE': '1.0.0',
+      },
+      devDependencies: {
+          'moduleG': '1.0.0',
+          '@organisation/moduleG': '1.0.0',
+      },
     });
+
+    mockDir(structure);
 }
 
 /**

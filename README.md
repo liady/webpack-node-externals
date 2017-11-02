@@ -46,6 +46,9 @@ The method in which unbundled modules will be required in the code. Best to leav
 #### `options.modulesDir (='node_modules')`
 The folder in which to search for the node modules.
 
+#### `options.modulesDirs (=['node_modules'])`
+An array of folder in which to search for the node modules.
+
 #### `options.modulesFromFile (=false)`
 Read the modules from the `package.json` file instead of the `node_modules` folder.
 
