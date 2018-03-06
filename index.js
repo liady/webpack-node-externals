@@ -8,6 +8,10 @@ function contains(arr, val) {
 }
 
 function readDir(dirName) {
+    if (!fs.existsSync(dirName)) {
+        return [];
+    }
+
     try {
         return fs.readdirSync(dirName).map(function(module) {
             if (atPrefix.test(module)) {
