@@ -180,8 +180,8 @@ describe('when modules dir does not exist', function() {
         mockNodeModules();
     })
     it('should not log ENOENT error', function() {
-        const log = global.console.log;
-        let errorLogged = false;
+        var log = global.console.log;
+        var errorLogged = false;
 
         // wrap console.log to catch error message
         global.console.log = function(error) {
