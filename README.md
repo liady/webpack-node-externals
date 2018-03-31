@@ -42,6 +42,12 @@ An array for the `externals` to whitelist, so they **will** be included in the b
 
 #### `options.importType (='commonjs')`
 The method in which unbundled modules will be required in the code. Best to leave as `commonjs` for node modules.
+May be one of [documented options](https://webpack.github.io/docs/configuration.html#externals) or function `callback(moduleName)` which returns custom code to be returned as import type, eg.:
+```js
+options.importType = function (moduleName) {
+    return "window['" + moduleName + "'];"
+}
+```
 
 #### `options.modulesDir (='node_modules')`
 The folder in which to search for the node modules.

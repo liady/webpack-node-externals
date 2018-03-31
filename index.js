@@ -100,8 +100,11 @@ module.exports = function nodeExternals(options) {
         if (contains(nodeModules, moduleName) && !containsPattern(whitelist, request)) {
             // mark this module as external
             // https://webpack.github.io/docs/configuration.html#externals
+            if (typeof importType === 'function') {
+                return callback(null, importType(request));
+            }
             return callback(null, importType + " " + request);
-        };
+        }
         callback();
     }
-}
+};
