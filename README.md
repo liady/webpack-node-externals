@@ -6,7 +6,7 @@ Webpack node modules externals
 [![Downloads](https://img.shields.io/npm/dm/webpack-node-externals.svg)](https://www.npmjs.org/package/webpack-node-externals)
 [![Build Status](https://travis-ci.org/liady/webpack-node-externals.svg?branch=master)](https://travis-ci.org/liady/webpack-node-externals)
 
-Webpack allows you to define [*externals*](https://webpack.github.io/docs/configuration.html#externals) - modules that should not be bundled.
+Webpack allows you to define [*externals*](https://webpack.js.org/configuration/externals) - modules that should not be bundled.
 
 When bundling with Webpack for the backend - you usually don't want to bundle its `node_modules` dependencies.
 This library creates an *externals* function that ignores `node_modules` when bundling in Webpack.<br/>(Inspired by the great [Backend apps with Webpack](http://jlongster.com/Backend-Apps-with-Webpack--Part-I) series)
@@ -42,6 +42,12 @@ An array for the `externals` to whitelist, so they **will** be included in the b
 
 #### `options.importType (='commonjs')`
 The method in which unbundled modules will be required in the code. Best to leave as `commonjs` for node modules.
+May be one of [documented options](https://webpack.js.org/configuration/externals/#externals) or function `callback(moduleName)` which returns custom code to be returned as import type, eg.:
+```js
+options.importType = function (moduleName) {
+    return 'amd ' + moduleName;
+}
+```
 
 #### `options.modulesDir (='node_modules')`
 The folder in which to search for the node modules.
@@ -68,7 +74,7 @@ For most use cases, the defaults of `importType` and `modulesDir` should be used
 
 ## Q&A
 #### Why not just use a regex in the Webpack config?
-Webpack allows inserting [regex](https://webpack.github.io/docs/configuration.html#externals) in the *externals* array, to capture non-relative modules:
+Webpack allows inserting [regex](https://webpack.js.org/configuration/externals/#regex) in the *externals* array, to capture non-relative modules:
 ```js
 {
     externals: [

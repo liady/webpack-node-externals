@@ -64,6 +64,17 @@ describe('invocation with a different importType', function() {
         it('when given a relative path', assertResult('./src/index.js', undefined));
     });
 
+    describe('should invoke a custom function', function(){
+        before(function(){
+            context.instance = nodeExternals({ importType: function(moduleName) {
+                return 'commonjs ' + moduleName;
+            }});
+        });
+
+        it('when given an existing module', assertResult('moduleA', 'commonjs moduleA'));
+        it('when given a non-node module', assertResult('non-node-module', undefined));
+    });
+
     after(function(){
         restoreMock()
     });
