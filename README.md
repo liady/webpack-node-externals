@@ -58,7 +58,7 @@ Read the modules from the `package.json` file instead of the `node_modules` fold
 ```js
 {
     modulesFromFile: true,
-    /* OR */
+    /* or */
     modulesFromFile: {
         exclude: [/* sections to exclude, i.e 'devDependencies' */],
         include: [/* sections to explicitly include, i.e only 'dependencies' */]
