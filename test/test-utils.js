@@ -1,4 +1,4 @@
-var mockDir = require('mock-fs-require-fix');
+var mockDir = require('mock-fs');
 var nodeExternals = require('../index.js');
 var webpack = require('webpack');
 var fs = require('fs');
