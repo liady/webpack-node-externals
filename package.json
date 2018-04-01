@@ -34,7 +34,8 @@
   "files": [
     "LICENSE",
     "README.md",
-    "index.js"
+    "index.js",
+    "utils.js"
   ],
   "bugs": {
     "url": "https://github.com/liady/webpack-node-externals/issues"
