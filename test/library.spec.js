@@ -82,7 +82,6 @@ describe('reads from a file', function() {
         it('when given an existing module for scoped package in the file', assertResult('@organisation/moduleE', 'commonjs @organisation/moduleE'));
         it('when given an existing file in a sub-module', assertResult('moduleG/another-sub/index.js', 'commonjs moduleG/another-sub/index.js'));
         it('when given an existing file in a scoped package', assertResult('@organisation/moduleG/index.js', 'commonjs @organisation/moduleG/index.js'))
-
     });
 
     describe('should invoke an empty callback', function(){
@@ -90,6 +89,31 @@ describe('reads from a file', function() {
         it('when given a module in the folder but not in the file', assertResult('moduleA', undefined));
         it('when given a module of scoped package in the folder but not in the file', assertResult('@organisation/moduleA', undefined));
         it('when given a relative path', assertResult('./src/index.js', undefined));
+    });
+
+    describe('should accept options from file', function(){
+        describe(' > include', function(){
+            before(function(){
+                context.instance = nodeExternals({ modulesFromFile: { include: ['dependencies']}});
+            });
+            it('when given a module in the include', assertResult('moduleE', 'commonjs moduleE'));
+            it('when given a module not in the include', assertResult('moduleG', undefined));
+        });
+
+        describe(' > exclude', function(){
+            before(function(){
+                context.instance = nodeExternals({ modulesFromFile: { exclude: ['dependencies']}});
+            });
+            it('when given a module in the exclude', assertResult('moduleE', undefined));
+            it('when given a module not in the exclude', assertResult('moduleG', 'commonjs moduleG'));
+        });
+
+        describe(' > file name', function(){
+            before(function(){
+                context.instance = nodeExternals({ modulesFromFile: { fileName: 'noFile.json'}});
+            });
+            it('when given any module, return empty', assertResult('moduleE', undefined));
+        });
     });
 
     after(function(){
