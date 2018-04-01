@@ -30,7 +30,6 @@ function readDir(dirName) {
             return prev.concat(next);
         }, []);
     } catch (e) {
-        console.log(e);
         return [];
     }
 }
