@@ -54,8 +54,19 @@ The folder in which to search for the node modules.
 
 #### `options.modulesFromFile (=false)`
 Read the modules from the `package.json` file instead of the `node_modules` folder.
+<br/>Accepts a boolean or a configuration object:
+```js
+{
+    modulesFromFile: true,
+    /* OR */
+    modulesFromFile: {
+        exclude: [/* sections to exclude, i.e 'devDependencies' */],
+        include: [/* sections to explicitly include, i.e only 'dependencies' */]
+    }
+}
+```
 
-#### Example
+#### Usage example
 ```js
 var nodeExternals = require('webpack-node-externals');
 ...
