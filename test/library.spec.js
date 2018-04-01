@@ -4,6 +4,8 @@ var mockNodeModules = testUtils.mockNodeModules;
 var restoreMock = testUtils.restoreMock;
 var context={};
 var assertResult = testUtils.buildAssertion.bind(null, context);
+var chai = require('chai');
+var expect = chai.expect;
 
 // Test basic functionality
 describe('invocation with no settings', function() {
@@ -172,3 +174,39 @@ describe('invocation with an absolute path setting', function() {
         restoreMock()
     });
 });
+
+describe('when modules dir does not exist', function() {
+    before(function() {
+        mockNodeModules();
+    })
+    it('should not log ENOENT error', function() {
+        var log = global.console.log;
+        var errorLogged = false;
+
+        // wrap console.log to catch error message
+        global.console.log = function(error) {
+            if (error instanceof Error && error.message.indexOf("ENOENT, no such file or directory 'node_modules/somepackage/node_modules") !== -1) {
+                errorLogged = true;
+            }
+            log.apply(null, arguments);
+        }
+
+        context.instance = nodeExternals({
+            modulesDir: 'node_modules/somepackage/node_modules'
+        });
+
+        // cleanup specific testcase env changes
+        global.console.log = log;
+
+        expect(errorLogged, 'ENOENT not logged').to.be.equal(false);
+    });
+    it('should process like node_modules is empty', function(done) {
+        context.instance = nodeExternals({
+            modulesDir: 'node_modules/somepackage/node_modules'
+        });
+        testUtils.buildAssertion(context, 'somepackage', undefined)(done);
+    });
+    after(function(){
+        restoreMock()
+    });
+})
