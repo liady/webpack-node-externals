@@ -66,7 +66,7 @@ Read the modules from the `package.json` file instead of the `node_modules` fold
 }
 ```
 
-#### Usage example
+## Usage example
 ```js
 var nodeExternals = require('webpack-node-externals');
 ...
