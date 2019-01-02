@@ -17,7 +17,7 @@ var expect = chai.expect;
  */
 exports.buildAssertion = function buildAssertion(context, moduleName, expectedResult){
     return function(done) {
-        context.instance(relative(), moduleName, function(noarg, externalModule) {
+        context.instance({ context: relative(), request: moduleName }, function(noarg, externalModule) {
             expect(externalModule).to.be.equal(expectedResult);
             done();
         })
