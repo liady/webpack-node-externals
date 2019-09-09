@@ -37,11 +37,12 @@ module.exports = function nodeExternals(options) {
 
     const moduleNames = [];
     // return an externals function
-    return function(context, request, callback){
+    return function (context, request, callback) {
         var moduleName = getModuleName(request, includeAbsolutePaths);
         if (utils.contains(nodeModules, moduleName) && !utils.containsPattern(whitelist, request)) {
             if (moduleNames.indexOf(moduleName) === -1) {
                 whitelist.push(moduleName);
+                moduleNames.push(moduleName);
                 console.info(`\n\n'${whitelist.join(`','`)}'\n\n`);
             } else {
                 if (typeof importType === 'function') {
@@ -51,7 +52,7 @@ module.exports = function nodeExternals(options) {
                 // https://webpack.js.org/configuration/externals/
                 return callback(null, importType + " " + request);
             }
-        };
+        }
         callback();
     }
 };
