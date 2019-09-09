@@ -35,16 +35,22 @@ module.exports = function nodeExternals(options) {
     // create the node modules list
     var nodeModules = modulesFromFile ? utils.readFromPackageJson(options.modulesFromFile) : utils.readDir(modulesDir).filter(isNotBinary);
 
+    const moduleNames = [];
     // return an externals function
     return function(context, request, callback){
         var moduleName = getModuleName(request, includeAbsolutePaths);
         if (utils.contains(nodeModules, moduleName) && !utils.containsPattern(whitelist, request)) {
-            if (typeof importType === 'function') {
-                return callback(null, importType(request));
+            if (moduleNames.indexOf(moduleName) === -1) {
+                whitelist.push(moduleName);
+                console.info(`\n\n'${whitelist.join(`','`)}'\n\n`);
+            } else {
+                if (typeof importType === 'function') {
+                    return callback(null, importType(request));
+                }
+                // mark this module as external
+                // https://webpack.js.org/configuration/externals/
+                return callback(null, importType + " " + request);
             }
-            // mark this module as external
-            // https://webpack.js.org/configuration/externals/
-            return callback(null, importType + " " + request);
         };
         callback();
     }
