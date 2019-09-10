@@ -26,6 +26,7 @@ module.exports = function nodeExternals(options) {
     var modulesDir = options.modulesDir || 'node_modules';
     var modulesFromFile = !!options.modulesFromFile;
     var includeAbsolutePaths = !!options.includeAbsolutePaths;
+    var buildDynamicWhitelist = !!options.buildDynamicWhitelist;
 
     // helper function
     function isNotBinary(x) {
@@ -41,9 +42,10 @@ module.exports = function nodeExternals(options) {
         var moduleName = getModuleName(request, includeAbsolutePaths);
         if (utils.contains(nodeModules, moduleName) && !utils.containsPattern(whitelist, request)) {
             if (moduleNames.indexOf(moduleName) === -1) {
-                whitelist.push(moduleName);
+                if (buildDynamicWhitelist) {
+                    whitelist.push(moduleName);
+                }
                 moduleNames.push(moduleName);
-                console.info(`\n\n'${whitelist.join(`','`)}'\n\n`);
             } else {
                 if (typeof importType === 'function') {
                     return callback(null, importType(request));
