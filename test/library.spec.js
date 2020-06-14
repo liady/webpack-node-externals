@@ -132,13 +132,13 @@ describe('reads from a file', function() {
     });
 });
 
-// Test whitelist
-describe('respects a whitelist', function() {
+// Test allowlist
+describe('respects a allowlist', function() {
 
     before(function(){
         mockNodeModules();
         context.instance = nodeExternals({
-            whitelist: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC', function (m) {
+            allowlist: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC', function (m) {
                 return m == 'moduleF';
             }, /^moduleD/]
         });

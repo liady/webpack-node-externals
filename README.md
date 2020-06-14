@@ -36,9 +36,9 @@ This library scans the `node_modules` folder for all node_modules names, and bui
 ### Configuration
 This library accepts an `options` object.
 
-#### `options.whitelist (=[])`
-An array for the `externals` to whitelist, so they **will** be included in the bundle. Can accept exact strings (`'module_name'`), regex patterns (`/^module_name/`), or a function that accepts the module name and returns whether it should be included.
-<br/>**Important** - if you have set aliases in your webpack config with the exact same names as modules in *node_modules*, you need to whitelist them so Webpack will know they should be bundled.
+#### `options.allowlist (=[])`
+An array for the `externals` to allow, so they **will** be included in the bundle. Can accept exact strings (`'module_name'`), regex patterns (`/^module_name/`), or a function that accepts the module name and returns whether it should be included.
+<br/>**Important** - if you have set aliases in your webpack config with the exact same names as modules in *node_modules*, you need to allowlist them so Webpack will know they should be bundled.
 
 #### `options.importType (='commonjs')`
 The method in which unbundled modules will be required in the code. Best to leave as `commonjs` for node modules.
@@ -75,7 +75,7 @@ module.exports = {
     target: 'node', // important in order not to bundle built-in modules like path, fs, etc.
     externals: [nodeExternals({
         // this WILL include `jquery` and `webpack/hot/dev-server` in the bundle, as well as `lodash/*`
-        whitelist: ['jquery', 'webpack/hot/dev-server', /^lodash/]
+        allowlist: ['jquery', 'webpack/hot/dev-server', /^lodash/]
     })],
     ...
 };
@@ -99,12 +99,12 @@ However, this will leave unbundled **all non-relative requires**, so it does not
 This library scans the `node_modules` folder, so it only leaves unbundled the actual node modules that are being used.
 
 #### How can I bundle required assets (i.e css files) from node_modules?
-Using the `whitelist` option, this is possible. We can simply tell Webpack to bundle all files with extensions that are not js/jsx/json, using this [regex](https://regexper.com/#%5C.(%3F!(%3F%3Ajs%7Cjson)%24).%7B1%2C5%7D%24):
+Using the `allowlist` option, this is possible. We can simply tell Webpack to bundle all files with extensions that are not js/jsx/json, using this [regex](https://regexper.com/#%5C.(%3F!(%3F%3Ajs%7Cjson)%24).%7B1%2C5%7D%24):
 ```js
 ...
 nodeExternals({
   // load non-javascript files with extensions, presumably via loaders
-  whitelist: [/\.(?!(?:jsx?|json)$).{1,5}$/i],
+  allowlist: [/\.(?!(?:jsx?|json)$).{1,5}$/i],
 }),
 ...
 ```
