@@ -52,6 +52,9 @@ options.importType = function (moduleName) {
 #### `options.modulesDir (='node_modules')`
 The folder in which to search for the node modules.
 
+#### `options.additionalModuleDirs (='[]')`
+Additional folders to look for node modules.
+
 #### `options.modulesFromFile (=false)`
 Read the modules from the `package.json` file instead of the `node_modules` folder.
 <br/>Accepts a boolean or a configuration object:
