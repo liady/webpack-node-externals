@@ -44,7 +44,7 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
     var packageJson;
     try {
         var fileName = options.fileName || 'package.json';
-        var packageJsonString = fs.readFileSync(path.join(process.cwd(), './' + fileName), 'utf8');
+        var packageJsonString = fs.readFileSync(path.resolve(process.cwd(), fileName), 'utf8');
         packageJson = JSON.parse(packageJsonString);
     } catch (e){
         return [];

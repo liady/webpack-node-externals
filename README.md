@@ -63,6 +63,7 @@ Read the modules from the `package.json` file instead of the `node_modules` fold
     modulesFromFile: true,
     /* or */
     modulesFromFile: {
+        fileName: /* path to package.json to read from */,
         includeInBundle: [/* whole sections to include in the bundle, i.e 'devDependencies' */],
         excludeFromBundle: [/* whole sections to explicitly exclude from the bundle, i.e only 'dependencies' */]
     }
