@@ -37,6 +37,9 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
     if(typeof options !== 'object') {
         options = {};
     }
+    var includeInBundle = options.exclude || options.includeInBundle;
+    var excludeFromBundle = options.include || options.excludeFromBundle;
+
     // read the file
     var packageJson;
     try {
@@ -48,12 +51,12 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
     }
     // sections to search in package.json
     var sections = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
-    if(options.include) {
-        sections = [].concat(options.include);
+    if(excludeFromBundle) {
+        sections = [].concat(excludeFromBundle);
     }
-    if(options.exclude) {
+    if(includeInBundle) {
         sections = sections.filter(function(section){
-            return [].concat(options.exclude).indexOf(section) === -1;
+            return [].concat(includeInBundle).indexOf(section) === -1;
         });
     }
     // collect dependencies
