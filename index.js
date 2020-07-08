@@ -35,9 +35,9 @@ module.exports = function nodeExternals(options) {
 
     // create the node modules list
     var nodeModules = modulesFromFile ? utils.readFromPackageJson(options.modulesFromFile) : utils.readDir(modulesDir).filter(isNotBinary);
-    for (var i = 0; i < additionalModuleDirs.length; i++) {
-        nodeModules = nodeModules.concat(utils.readDir(additionalModuleDirs[i]));
-    }
+    additionalModuleDirs.forEach(function(additionalDirectory){
+        nodeModules = nodeModules.concat(utils.readDir(additionalDirectory).filter(isNotBinary));
+    })
 
     // return an externals function
     return function(context, request, callback){
