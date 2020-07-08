@@ -110,6 +110,13 @@ describe('reads from a file', function() {
             it('when given a module in the include', assertResult('moduleE', 'commonjs moduleE'));
             it('when given a module not in the include', assertResult('moduleG', undefined));
         });
+        describe(' > excludeFromBundle', function(){
+            before(function(){
+                context.instance = nodeExternals({ modulesFromFile: { excludeFromBundle: ['dependencies']}});
+            });
+            it('when given a module to exclude from bundle', assertResult('moduleE', 'commonjs moduleE'));
+            it('when given a module not to exclude from bundle', assertResult('moduleG', undefined));
+        });
 
         describe(' > exclude', function(){
             before(function(){
@@ -117,6 +124,14 @@ describe('reads from a file', function() {
             });
             it('when given a module in the exclude', assertResult('moduleE', undefined));
             it('when given a module not in the exclude', assertResult('moduleG', 'commonjs moduleG'));
+        });
+
+        describe(' > includeInBundle', function(){
+            before(function(){
+                context.instance = nodeExternals({ modulesFromFile: { includeInBundle: ['dependencies']}});
+            });
+            it('when given a module to include in bundle', assertResult('moduleE', undefined));
+            it('when given a module not to include in bundle', assertResult('moduleG', 'commonjs moduleG'));
         });
 
         describe(' > file name', function(){
@@ -132,13 +147,13 @@ describe('reads from a file', function() {
     });
 });
 
-// Test whitelist
-describe('respects a whitelist', function() {
+// Test allowlist
+describe('respects a allowlist', function() {
 
     before(function(){
         mockNodeModules();
         context.instance = nodeExternals({
-            whitelist: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC', function (m) {
+            allowlist: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC', function (m) {
                 return m == 'moduleF';
             }, /^moduleD/]
         });
