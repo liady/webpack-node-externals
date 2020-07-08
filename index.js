@@ -33,7 +33,7 @@ module.exports = function nodeExternals(options) {
     }
 
     // create the node modules list
-    var nodeModules = modulesFromFile ? utils.readFromPackageJson(modulesFromFile) : utils.readDir(modulesDir).filter(isNotBinary);
+    var nodeModules = modulesFromFile ? utils.readFromPackageJson(options.modulesFromFile) : utils.readDir(modulesDir).filter(isNotBinary);
 
     // return an externals function
     return function(context, request, callback){
