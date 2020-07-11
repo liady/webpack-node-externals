@@ -1,6 +1,9 @@
 var utils = require('./utils');
 
-var scopedModuleRegex = new RegExp('@[a-zA-Z0-9][\\w-.]+\/[a-zA-Z0-9][\\w-.]+([a-zA-Z0-9.\/]+)?', 'g');
+var scopedModuleRegex = new RegExp(
+    '@[a-zA-Z0-9][\\w-.]+/[a-zA-Z0-9][\\w-.]+([a-zA-Z0-9./]+)?',
+    'g'
+);
 
 function getModuleName(request, includeAbsolutePaths) {
     var req = request;
@@ -20,6 +23,12 @@ function getModuleName(request, includeAbsolutePaths) {
 
 module.exports = function nodeExternals(options) {
     options = options || {};
+    var mistakes = utils.validateOptions(options) || [];
+    if (mistakes.length) {
+        mistakes.forEach(function (mistake) {
+            utils.log(mistake.message);
+        });
+    }
     var allowlist = [].concat(options.allowlist || []);
     var binaryDirs = [].concat(options.binaryDirs || ['.bin']);
     var importType = options.importType || 'commonjs';
@@ -34,22 +43,29 @@ module.exports = function nodeExternals(options) {
     }
 
     // create the node modules list
-    var nodeModules = modulesFromFile ? utils.readFromPackageJson(options.modulesFromFile) : utils.readDir(modulesDir).filter(isNotBinary);
-    additionalModuleDirs.forEach(function(additionalDirectory){
-        nodeModules = nodeModules.concat(utils.readDir(additionalDirectory).filter(isNotBinary));
-    })
+    var nodeModules = modulesFromFile
+        ? utils.readFromPackageJson(options.modulesFromFile)
+        : utils.readDir(modulesDir).filter(isNotBinary);
+    additionalModuleDirs.forEach(function (additionalDirectory) {
+        nodeModules = nodeModules.concat(
+            utils.readDir(additionalDirectory).filter(isNotBinary)
+        );
+    });
 
     // return an externals function
-    return function(context, request, callback){
+    return function (context, request, callback) {
         var moduleName = getModuleName(request, includeAbsolutePaths);
-        if (utils.contains(nodeModules, moduleName) && !utils.containsPattern(allowlist, request)) {
+        if (
+            utils.contains(nodeModules, moduleName) &&
+            !utils.containsPattern(allowlist, request)
+        ) {
             if (typeof importType === 'function') {
                 return callback(null, importType(request));
             }
             // mark this module as external
             // https://webpack.js.org/configuration/externals/
-            return callback(null, importType + " " + request);
-        };
+            return callback(null, importType + ' ' + request);
+        }
         callback();
-    }
+    };
 };

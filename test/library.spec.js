@@ -1,4 +1,5 @@
 var nodeExternals = require('../index.js');
+var utils = require('../utils.js');
 var testUtils = require('./test-utils.js');
 var mockNodeModules = testUtils.mockNodeModules;
 var restoreMock = testUtils.restoreMock;
@@ -148,7 +149,7 @@ describe('reads from a file', function() {
 });
 
 // Test allowlist
-describe('respects a allowlist', function() {
+describe('respects an allowlist', function() {
 
     before(function(){
         mockNodeModules();
@@ -260,3 +261,23 @@ describe('when modules dir does not exist', function() {
         restoreMock()
     });
 })
+
+describe('validate options', function () {
+    it('should identify misspelled terms', function () {
+        var results = utils.validateOptions({ whitelist: [], moduledirs: [] });
+        expect(results.length).to.be.equal(2);
+        expect(results[0].correctTerm).to.be.equal('allowlist');
+        expect(results[1].correctTerm).to.be.equal('modulesDir');
+    });
+    it('should ignore duplications', function () {
+        var results = utils.validateOptions({ whitelist: [], moduledirs: [], allowlist: [] });
+        expect(results.length).to.be.equal(1);
+        expect(results[0].correctTerm).to.be.equal('modulesDir');
+    });
+    it('should identify wrong casing', function () {
+        var results = utils.validateOptions({ allowList: [], modulesdir: [] });
+        expect(results.length).to.be.equal(2);
+        expect(results[0].correctTerm).to.be.equal('allowlist');
+        expect(results[1].correctTerm).to.be.equal('modulesDir');
+    });
+});
