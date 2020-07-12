@@ -26,6 +26,11 @@ module.exports = function nodeExternals(options) {
     var mistakes = utils.validateOptions(options) || [];
     if (mistakes.length) {
         mistakes.forEach(function (mistake) {
+            utils.error(
+                mistakes.map(function (mistake) {
+                    return mistake.message;
+                })
+            );
             utils.log(mistake.message);
         });
     }

@@ -102,9 +102,9 @@ exports.validateOptions = function (options) {
     var mistakes = {
         allowlist: ['allowslist', 'whitelist', 'allow'],
         importType: ['import', 'importype', 'importtype'],
-        modulesDir: ['moduleDir', 'moduledir', 'moduledirs'],
+        modulesDir: ['moduledir', 'moduledirs'],
         modulesFromFile: ['modulesfile'],
-        includeAbsolutePaths: ['includeAbsolutePaths'],
+        includeAbsolutePaths: ['includeAbsolutesPaths'],
         additionalModuleDirs: ['additionalModulesDirs', 'additionalModulesDir'],
     };
     var optionsKeys = Object.keys(options);
@@ -130,6 +130,16 @@ exports.validateOptions = function (options) {
     return results;
 };
 
-exports.log = function(message) {
-    console.log(`[webpack-node-externals] : ${message}`)
-}
+exports.log = function (message) {
+    console.log(`[webpack-node-externals] : ${message}`);
+};
+
+exports.error = function (errors) {
+    throw new Error(
+        errors
+            .map(function (error) {
+                return `[webpack-node-externals] : ${error}`;
+            })
+            .join('\r\n')
+    );
+};
