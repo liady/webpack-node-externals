@@ -1,6 +1,6 @@
 {
   "name": "webpack-node-externals",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Easily exclude node_modules in Webpack bundle",
   "main": "index.js",
   "repository": {
