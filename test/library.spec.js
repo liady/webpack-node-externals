@@ -5,6 +5,7 @@ var mockNodeModules = testUtils.mockNodeModules;
 var restoreMock = testUtils.restoreMock;
 var context={};
 var assertResult = testUtils.buildAssertion.bind(null, context);
+var assertResultWebpack5 = testUtils.buildAssertionWebpack5.bind(null, context);
 var chai = require('chai');
 var expect = chai.expect;
 
@@ -261,6 +262,40 @@ describe('when modules dir does not exist', function() {
         restoreMock()
     });
 })
+
+// Test basic functionality
+describe('invocation with no settings - webpack 5', function() {
+
+    before(function(){
+        mockNodeModules();
+        context.instance = nodeExternals();
+    });
+
+    describe('should invoke a commonjs callback', function(){
+        it('when given an existing module', assertResultWebpack5('moduleA', 'commonjs moduleA'));
+        it('when given another existing module', assertResultWebpack5('moduleB', 'commonjs moduleB'));
+        it('when given another existing module for scoped package', assertResultWebpack5('@organisation/moduleA', 'commonjs @organisation/moduleA'));
+        it('when given an existing sub-module', assertResultWebpack5('moduleA/sub-module', 'commonjs moduleA/sub-module'));
+        it('when given an existing file in a sub-module', assertResultWebpack5('moduleA/another-sub/index.js', 'commonjs moduleA/another-sub/index.js'));
+        it('when given an existing file in a scoped package', assertResultWebpack5('@organisation/moduleA/index.js', 'commonjs @organisation/moduleA/index.js'))
+        it('when given an another existing file in a scoped package', assertResultWebpack5('@organisation/base-node/vs/base/common/paths', 'commonjs @organisation/base-node/vs/base/common/paths'))
+
+    });
+
+    describe('should invoke an empty callback', function(){
+        it('when given a non-node module', assertResultWebpack5('non-node-module', undefined));
+        it('when given a module in the file but not in folder', assertResultWebpack5('moduleE', undefined));
+        it('when given a relative path', assertResultWebpack5('./src/index.js', undefined));
+        it('when given a different absolute path', assertResultWebpack5('/test/node_modules/non-node-module', undefined));
+        it('when given a complex different absolute path', assertResultWebpack5('/test/node_modules/non-node-module/node_modules/moduleA', undefined));
+        it('when given an absolute path', assertResultWebpack5('/test/node_modules/moduleA', undefined));
+        it('when given an existing sub-module inside node_modules', assertResultWebpack5('/moduleA/node_modules/moduleB', undefined));
+    });
+
+    after(function(){
+        restoreMock()
+    });
+});
 
 describe('validate options', function () {
     it('should identify misspelled terms', function () {

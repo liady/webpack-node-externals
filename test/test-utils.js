@@ -25,6 +25,23 @@ exports.buildAssertion = function buildAssertion(context, moduleName, expectedRe
 }
 
 /**
+ * Creates an assertion function that makes sure to output expectedResult when given moduleName
+ * <<Webpack 5 version>>
+ * @param  {object} context          context object that holds the instance
+ * @param  {string} moduleName       given module name
+ * @param  {string} expectedResult   expected external module string
+ * @return {function}                the assertion function
+ */
+exports.buildAssertionWebpack5 = function buildAssertion(context, moduleName, expectedResult){
+    return function(done) {
+        context.instance({ context: relative(), request: moduleName }, function(noarg, externalModule) {
+            expect(externalModule).to.be.equal(expectedResult);
+            done();
+        })
+    };
+}
+
+/**
  * Mocks the fs module to output a desired structure
  * @param  {object} structure       the requested structure
  * @return {void}

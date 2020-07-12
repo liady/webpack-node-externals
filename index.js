@@ -53,7 +53,16 @@ module.exports = function nodeExternals(options) {
     });
 
     // return an externals function
-    return function (context, request, callback) {
+    return function (arg1, arg2, arg3) {
+        var context = arg1;
+        var request = arg2;
+        var callback = arg3;
+        // in case of webpack 5
+        if (arg1 && arg1.context && arg1.request) {
+            context = arg1.context;
+            request = arg1.request;
+            callback = arg2;
+        }
         var moduleName = getModuleName(request, includeAbsolutePaths);
         if (
             utils.contains(nodeModules, moduleName) &&
