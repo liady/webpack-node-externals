@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var resolve = require('resolve');
 
 exports.contains = function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
@@ -142,4 +143,12 @@ exports.error = function (errors) {
             })
             .join('\r\n')
     );
+};
+
+exports.resolveRequest= function (req, issuer) {
+  var basedir =
+    issuer.endsWith(path.posix.sep) || issuer.endsWith(path.win32.sep)
+      ? issuer
+      : path.dirname(issuer);
+  return resolve.sync(req, { basedir: basedir });
 };
