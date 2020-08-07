@@ -98,6 +98,7 @@ exports.containsPattern = function containsPattern(arr, val) {
 };
 
 exports.validateOptions = function (options) {
+    options = options || {};
     var results = [];
     var mistakes = {
         allowlist: ['allowslist', 'whitelist', 'allow'],
@@ -112,7 +113,7 @@ exports.validateOptions = function (options) {
         return optionName && optionName.toLowerCase();
     });
     Object.keys(mistakes).forEach(function (correctTerm) {
-        if (options[correctTerm] === undefined) {
+        if (!options.hasOwnProperty(correctTerm)) {
             mistakes[correctTerm]
                 .concat(correctTerm.toLowerCase())
                 .forEach(function (mistake) {

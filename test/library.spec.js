@@ -315,4 +315,9 @@ describe('validate options', function () {
         expect(results[0].correctTerm).to.be.equal('allowlist');
         expect(results[1].correctTerm).to.be.equal('modulesDir');
     });
+    it('should no identify undefineds', function () {
+        var results = utils.validateOptions({ allowlist: undefined, modulesdir: [] });
+        expect(results.length).to.be.equal(1);
+        expect(results[0].correctTerm).to.be.equal('modulesDir');
+    });
 });
