@@ -58,7 +58,10 @@ module.exports = function nodeExternals(options) {
     });
 
     // return an externals function
-    return function (arg1, arg2, arg3) {
+    return function () {
+        var arg1 = arguments[0];
+        var arg2 = arguments[1];
+        var arg3 = arguments[2];
         var context = arg1;
         var request = arg2;
         var callback = arg3;
