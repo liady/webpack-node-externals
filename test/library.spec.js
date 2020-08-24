@@ -1,13 +1,13 @@
-var nodeExternals = require('../index.js');
-var utils = require('../utils.js');
-var testUtils = require('./test-utils.js');
-var mockNodeModules = testUtils.mockNodeModules;
-var restoreMock = testUtils.restoreMock;
-var context={};
-var assertResult = testUtils.buildAssertion.bind(null, context);
-var assertResultWebpack5 = testUtils.buildAssertionWebpack5.bind(null, context);
-var chai = require('chai');
-var expect = chai.expect;
+const nodeExternals = require('../index.js');
+const utils = require('../utils.js');
+const testUtils = require('./test-utils.js');
+const mockNodeModules = testUtils.mockNodeModules;
+const restoreMock = testUtils.restoreMock;
+const context={};
+const assertResult = testUtils.buildAssertion.bind(null, context);
+const assertResultWebpack5 = testUtils.buildAssertionWebpack5.bind(null, context);
+const chai = require('chai');
+const expect = chai.expect;
 
 // Test basic functionality
 describe('invocation with no settings', function() {
@@ -232,8 +232,8 @@ describe('when modules dir does not exist', function() {
         mockNodeModules();
     })
     it('should not log ENOENT error', function() {
-        var log = global.console.log;
-        var errorLogged = false;
+        const log = global.console.log;
+        let errorLogged = false;
 
         // wrap console.log to catch error message
         global.console.log = function(error) {
@@ -299,24 +299,24 @@ describe('invocation with no settings - webpack 5', function() {
 
 describe('validate options', function () {
     it('should identify misspelled terms', function () {
-        var results = utils.validateOptions({ whitelist: [], moduledirs: [] });
+        const results = utils.validateOptions({ whitelist: [], moduledirs: [] });
         expect(results.length).to.be.equal(2);
         expect(results[0].correctTerm).to.be.equal('allowlist');
         expect(results[1].correctTerm).to.be.equal('modulesDir');
     });
     it('should ignore duplications', function () {
-        var results = utils.validateOptions({ whitelist: [], moduledirs: [], allowlist: [] });
+        const results = utils.validateOptions({ whitelist: [], moduledirs: [], allowlist: [] });
         expect(results.length).to.be.equal(1);
         expect(results[0].correctTerm).to.be.equal('modulesDir');
     });
     it('should identify wrong casing', function () {
-        var results = utils.validateOptions({ allowList: [], modulesdir: [] });
+        const results = utils.validateOptions({ allowList: [], modulesdir: [] });
         expect(results.length).to.be.equal(2);
         expect(results[0].correctTerm).to.be.equal('allowlist');
         expect(results[1].correctTerm).to.be.equal('modulesDir');
     });
     it('should no identify undefineds', function () {
-        var results = utils.validateOptions({ allowlist: undefined, modulesdir: [] });
+        const results = utils.validateOptions({ allowlist: undefined, modulesdir: [] });
         expect(results.length).to.be.equal(1);
         expect(results[0].correctTerm).to.be.equal('modulesDir');
     });

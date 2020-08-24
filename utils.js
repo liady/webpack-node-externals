@@ -1,11 +1,11 @@
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 exports.contains = function contains(arr, val) {
     return arr && arr.indexOf(val) !== -1;
 };
 
-var atPrefix = new RegExp('^@', 'g');
+const atPrefix = new RegExp('^@', 'g');
 exports.readDir = function readDir(dirName) {
     if (!fs.existsSync(dirName)) {
         return [];
@@ -42,14 +42,14 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
     if (typeof options !== 'object') {
         options = {};
     }
-    var includeInBundle = options.exclude || options.includeInBundle;
-    var excludeFromBundle = options.include || options.excludeFromBundle;
+    const includeInBundle = options.exclude || options.includeInBundle;
+    const excludeFromBundle = options.include || options.excludeFromBundle;
 
     // read the file
-    var packageJson;
+    let packageJson;
     try {
-        var fileName = options.fileName || 'package.json';
-        var packageJsonString = fs.readFileSync(
+        const fileName = options.fileName || 'package.json';
+        const packageJsonString = fs.readFileSync(
             path.resolve(process.cwd(), fileName),
             'utf8'
         );
@@ -58,7 +58,7 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
         return [];
     }
     // sections to search in package.json
-    var sections = [
+    let sections = [
         'dependencies',
         'devDependencies',
         'peerDependencies',
@@ -73,7 +73,7 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
         });
     }
     // collect dependencies
-    var deps = {};
+    const deps = {};
     sections.forEach(function (section) {
         Object.keys(packageJson[section] || {}).forEach(function (dep) {
             deps[dep] = true;
@@ -99,8 +99,8 @@ exports.containsPattern = function containsPattern(arr, val) {
 
 exports.validateOptions = function (options) {
     options = options || {};
-    var results = [];
-    var mistakes = {
+    const results = [];
+    const mistakes = {
         allowlist: ['allowslist', 'whitelist', 'allow'],
         importType: ['import', 'importype', 'importtype'],
         modulesDir: ['moduledir', 'moduledirs'],
@@ -108,8 +108,8 @@ exports.validateOptions = function (options) {
         includeAbsolutePaths: ['includeAbsolutesPaths'],
         additionalModuleDirs: ['additionalModulesDirs', 'additionalModulesDir'],
     };
-    var optionsKeys = Object.keys(options);
-    var optionsKeysLower = optionsKeys.map(function (optionName) {
+    const optionsKeys = Object.keys(options);
+    const optionsKeysLower = optionsKeys.map(function (optionName) {
         return optionName && optionName.toLowerCase();
     });
     Object.keys(mistakes).forEach(function (correctTerm) {
@@ -117,7 +117,7 @@ exports.validateOptions = function (options) {
             mistakes[correctTerm]
                 .concat(correctTerm.toLowerCase())
                 .forEach(function (mistake) {
-                    var ind = optionsKeysLower.indexOf(mistake.toLowerCase());
+                    const ind = optionsKeysLower.indexOf(mistake.toLowerCase());
                     if (ind > -1) {
                         results.push({
                             message: `Option '${optionsKeys[ind]}' is not supported. Did you mean '${correctTerm}'?`,
