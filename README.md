@@ -18,7 +18,7 @@ npm install webpack-node-externals --save-dev
 
 In your `webpack.config.js`:
 ```js
-var nodeExternals = require('webpack-node-externals');
+const nodeExternals = require('webpack-node-externals');
 ...
 module.exports = {
     ...
@@ -28,6 +28,20 @@ module.exports = {
 };
 ```
 And that's it. All node modules will no longer be bundled but will be left as `require('module')`.
+
+**Note**: For Webpack 5, replace `target: 'node'` with the `externalsPreset` object:
+```js
+// Webpack 5
+
+const nodeExternals = require('webpack-node-externals');
+...
+module.exports = {
+    ...
+    externalsPresets: { node: true }, // in order to ignore built-in modules like path, fs, etc.
+    externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
+    ...
+};
+```
 
 ## Detailed overview
 ### Description
