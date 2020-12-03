@@ -1,4 +1,6 @@
 var utils = require('./utils');
+var fs = require('fs');
+var path = require('path');
 
 var scopedModuleRegex = new RegExp(
     '@[a-zA-Z0-9][\\w-.]+/[a-zA-Z0-9][\\w-.]+([a-zA-Z0-9./]+)?',
@@ -71,11 +73,25 @@ module.exports = function nodeExternals(options) {
             request = arg1.request;
             callback = arg2;
         }
+
+        var res = request;
+        try {
+          res = utils.resolveRequest(request, `${context}/`)
+        } catch (err) {
+          res = request
+        }
+
         var moduleName = getModuleName(request, includeAbsolutePaths);
+
+        // use res incase modules main does not resolve to js.
+        // e.g. reset-css resolves to reset-css/reset.css
+        // makes /\.css$/ work in this case
+        // then use request to make 'a-module' work
         if (
             utils.contains(nodeModules, moduleName) &&
+            !utils.containsPattern(allowlist, res) &&
             !utils.containsPattern(allowlist, request)
-        ) {
+        ) { // externalize module
             if (typeof importType === 'function') {
                 return callback(null, importType(request));
             }
@@ -83,6 +99,6 @@ module.exports = function nodeExternals(options) {
             // https://webpack.js.org/configuration/externals/
             return callback(null, importType + ' ' + request);
         }
-        callback();
+        callback();; // bundle module
     };
 };
