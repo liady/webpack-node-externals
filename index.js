@@ -34,7 +34,7 @@ module.exports = function nodeExternals(options) {
             utils.log(mistake.message);
         });
     }
-    var allowlist = [].concat(options.allowlist || [/^webpack\/container\/reference\//]);
+    var allowlist = [/^webpack\/container\/reference\//].concat(options.allowlist || []);;
     var binaryDirs = [].concat(options.binaryDirs || ['.bin']);
     var importType = options.importType || 'commonjs';
     var modulesDir = options.modulesDir || 'node_modules';
