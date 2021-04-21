@@ -180,6 +180,11 @@ describe('respects an allowlist', function() {
         it('when given a relative path', assertResult('./src/index.js', undefined));
     });
 
+    describe('should respect webpack 5 internal allowlist', function() {
+        it('should ignore the specific path (empty callback)', assertResult('webpack/container/reference/', undefined));
+        it('should invoke a commonjs callback', assertResult('moduleB', 'commonjs moduleB'));
+    });
+
     after(function(){
         restoreMock()
     });

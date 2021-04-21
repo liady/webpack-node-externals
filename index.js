@@ -30,7 +30,10 @@ module.exports = function nodeExternals(options) {
             utils.log(mistake.message);
         });
     }
-    const allowlist = [].concat(options.allowlist || []);
+    const webpackInternalAllowlist = [/^webpack\/container\/reference\//];
+    const allowlist = []
+        .concat(webpackInternalAllowlist)
+        .concat(options.allowlist || []);
     const binaryDirs = [].concat(options.binaryDirs || ['.bin']);
     const importType = options.importType || 'commonjs';
     const modulesDir = options.modulesDir || 'node_modules';
