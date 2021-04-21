@@ -1,13 +1,13 @@
-var utils = require('./utils');
+const utils = require('./utils');
 
-var scopedModuleRegex = new RegExp(
+const scopedModuleRegex = new RegExp(
     '@[a-zA-Z0-9][\\w-.]+/[a-zA-Z0-9][\\w-.]+([a-zA-Z0-9./]+)?',
     'g'
 );
 
 function getModuleName(request, includeAbsolutePaths) {
-    var req = request;
-    var delimiter = '/';
+    let req = request;
+    const delimiter = '/';
 
     if (includeAbsolutePaths) {
         req = req.replace(/^.*?\/node_modules\//, '');
@@ -23,24 +23,23 @@ function getModuleName(request, includeAbsolutePaths) {
 
 module.exports = function nodeExternals(options) {
     options = options || {};
-    var mistakes = utils.validateOptions(options) || [];
+    const mistakes = utils.validateOptions(options) || [];
     if (mistakes.length) {
-        mistakes.forEach(function (mistake) {
-            utils.error(
-                mistakes.map(function (mistake) {
-                    return mistake.message;
-                })
-            );
+        mistakes.forEach((mistake) => {
+            utils.error(mistakes.map((mistake) => mistake.message));
             utils.log(mistake.message);
         });
     }
-    var allowlist = [].concat(options.allowlist || []);
-    var binaryDirs = [].concat(options.binaryDirs || ['.bin']);
-    var importType = options.importType || 'commonjs';
-    var modulesDir = options.modulesDir || 'node_modules';
-    var modulesFromFile = !!options.modulesFromFile;
-    var includeAbsolutePaths = !!options.includeAbsolutePaths;
-    var additionalModuleDirs = options.additionalModuleDirs || [];
+    const webpackInternalAllowlist = [/^webpack\/container\/reference\//];
+    const allowlist = []
+        .concat(webpackInternalAllowlist)
+        .concat(options.allowlist || []);
+    const binaryDirs = [].concat(options.binaryDirs || ['.bin']);
+    const importType = options.importType || 'commonjs';
+    const modulesDir = options.modulesDir || 'node_modules';
+    const modulesFromFile = !!options.modulesFromFile;
+    const includeAbsolutePaths = !!options.includeAbsolutePaths;
+    const additionalModuleDirs = options.additionalModuleDirs || [];
 
     // helper function
     function isNotBinary(x) {
@@ -48,7 +47,7 @@ module.exports = function nodeExternals(options) {
     }
 
     // create the node modules list
-    var nodeModules = modulesFromFile
+    let nodeModules = modulesFromFile
         ? utils.readFromPackageJson(options.modulesFromFile)
         : utils.readDir(modulesDir).filter(isNotBinary);
     additionalModuleDirs.forEach(function (additionalDirectory) {
@@ -58,20 +57,18 @@ module.exports = function nodeExternals(options) {
     });
 
     // return an externals function
-    return function () {
-        var arg1 = arguments[0];
-        var arg2 = arguments[1];
-        var arg3 = arguments[2];
-        var context = arg1;
-        var request = arg2;
-        var callback = arg3;
+    return function (...args) {
+        const [arg1, arg2, arg3] = args;
+        // let context = arg1;
+        let request = arg2;
+        let callback = arg3;
         // in case of webpack 5
         if (arg1 && arg1.context && arg1.request) {
-            context = arg1.context;
+            // context = arg1.context;
             request = arg1.request;
             callback = arg2;
         }
-        var moduleName = getModuleName(request, includeAbsolutePaths);
+        const moduleName = getModuleName(request, includeAbsolutePaths);
         if (
             utils.contains(nodeModules, moduleName) &&
             !utils.containsPattern(allowlist, request)

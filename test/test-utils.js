@@ -1,12 +1,12 @@
-var mockDir = require('mock-fs');
-var nodeExternals = require('../index.js');
-var webpack = require('webpack');
-var fs = require('fs');
-var ncp = require('ncp').ncp;
-var path = require('path');
-var relative = path.join.bind(path, __dirname);
-var chai = require('chai');
-var expect = chai.expect;
+const mockDir = require('mock-fs');
+const nodeExternals = require('../index.js');
+const webpack = require('webpack');
+const fs = require('fs');
+const ncp = require('ncp').ncp;
+const path = require('path');
+const relative = path.join.bind(path, __dirname);
+const chai = require('chai');
+const expect = chai.expect;
 
 /**
  * Creates an assertion function that makes sure to output expectedResult when given moduleName
@@ -124,9 +124,9 @@ exports.webpackAssertion = function webpackAssertion(nodeExternalsConfig, extern
  * @return {Promise}
  */
 function generateWithWebpack(nodeExternalsConfig) {
-    var testDir = relative('test-webpack');
-    var outputFileName = 'bundle.js';
-    var outputFile = path.join(testDir, outputFileName);
+    const testDir = relative('test-webpack');
+    const outputFileName = 'bundle.js';
+    const outputFile = path.join(testDir, outputFileName);
     return new Promise(function(resolve, reject) {
         webpack({
             entry: path.join(testDir, 'index.js'),
@@ -140,11 +140,11 @@ function generateWithWebpack(nodeExternalsConfig) {
                     'module-c' : path.join(testDir, './modules/module-c')
                 }
             }
-        }, function(err, stats){
+        }, function(err){
             if(err) {
                 reject(err);
             } else {
-                var contents = fs.readFileSync(outputFile, 'utf-8');
+                const contents = fs.readFileSync(outputFile, 'utf-8');
                 fs.unlinkSync(outputFile);
                 resolve(contents);
             }
@@ -173,7 +173,7 @@ function external(moduleName) {
 
 function removeDir(dirName) {
     if(fs.existsSync(dirName) ) {
-      fs.readdirSync(dirName).forEach(function(file, index){
+      fs.readdirSync(dirName).forEach(function(file){
         fs.unlinkSync(path.join(dirName, file));
       });
       fs.rmdirSync(dirName);

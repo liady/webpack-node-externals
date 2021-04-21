@@ -1,6 +1,5 @@
-var nodeExternals = require('../index.js');
-var testUtils = require('./test-utils.js');
-var webpackAssertion = testUtils.webpackAssertion
+const testUtils = require('./test-utils.js');
+const webpackAssertion = testUtils.webpackAssertion
 
 // Test actual webpack output
 describe('actual webpack bundling', function() {
