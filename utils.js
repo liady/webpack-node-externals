@@ -38,6 +38,11 @@ exports.readDir = function readDir(dirName) {
     }
 };
 
+function getFilePath(options) {
+    return path.resolve(process.cwd(), options.fileName || 'package.json');
+}
+exports.getFilePath = getFilePath;
+
 exports.readFromPackageJson = function readFromPackageJson(options) {
     if (typeof options !== 'object') {
         options = {};
@@ -48,11 +53,7 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
     // read the file
     let packageJson;
     try {
-        const fileName = options.fileName || 'package.json';
-        const packageJsonString = fs.readFileSync(
-            path.resolve(process.cwd(), fileName),
-            'utf8'
-        );
+        const packageJsonString = fs.readFileSync(getFilePath(options), 'utf8');
         packageJson = JSON.parse(packageJsonString);
     } catch (e) {
         return [];
