@@ -332,6 +332,6 @@ describe('file path', function() {
     it('should return the correct file path', function() {
         expect(utils.getFilePath({ fileName: 'file.json' })).to.be.equal(path.resolve(process.cwd(), 'file.json'));
         expect(utils.getFilePath({})).to.be.equal(path.resolve(process.cwd(), 'package.json'));
-        expect(utils.getFilePath({ fileName: 'c:\\test\\test.js' })).to.be.equal('c:\\test\\test.js');
+        expect(utils.getFilePath({ fileName: path.resolve(__dirname) })).to.be.equal(path.resolve(__dirname));
     })
 })
