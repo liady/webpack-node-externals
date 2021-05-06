@@ -3,6 +3,7 @@
     "version": "3.0.0",
     "description": "Easily exclude node_modules in Webpack bundle",
     "main": "index.js",
+    "types": "types/index.d.ts",
     "repository": {
         "type": "git",
         "url": "https://github.com/liady/webpack-node-externals.git"
@@ -15,12 +16,16 @@
         "mocha": "^2.5.3",
         "mock-fs": "^4.12.0",
         "ncp": "^2.0.0",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.2.4",
         "webpack": "^4.44.1"
     },
     "scripts": {
         "unit": "mocha --colors ./test/*.spec.js",
         "unit-watch": "mocha --colors -w ./test/*.spec.js",
-        "test": "npm run unit-watch"
+        "test": "npm run unit-watch",
+        "pretypes": "rimraf ./types/",
+        "types": "tsc"
     },
     "keywords": [
         "webpack",
@@ -37,6 +42,7 @@
         "LICENSE",
         "README.md",
         "index.js",
+        "types/*",
         "utils.js"
     ],
     "bugs": {

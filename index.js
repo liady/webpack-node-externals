@@ -21,6 +21,18 @@ function getModuleName(request, includeAbsolutePaths) {
     return req.split(delimiter)[0];
 }
 
+/**
+ * @param {{
+ *   additionalModuleDirs?: string[];
+ *   allowlist?: string | RegExp | ((moduleName: string) => boolean) | (string | RegExp | ((moduleName: string) => boolean))[];
+ *   binaryDirs?: string[];
+ *   importType?: 'amd' | 'commonjs' | 'this' | 'umd' | 'var' | ((moduleName: string) => string);
+ *   includeAbsolutePaths?: boolean;
+ *   modulesDir?: string;
+ *   modulesFromFile?: boolean | { exclude?: string | string[]; include?: string | string[]; };
+ * }} [options]
+ * @returns (...args: any[]) => any
+ */
 module.exports = function nodeExternals(options) {
     options = options || {};
     const mistakes = utils.validateOptions(options) || [];
