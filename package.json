@@ -15,7 +15,7 @@
         "mocha": "^2.5.3",
         "mock-fs": "^4.12.0",
         "ncp": "^2.0.0",
-        "webpack": "^4.44.1"
+        "webpack": "^5.75.0"
     },
     "scripts": {
         "unit": "mocha --colors ./test/*.spec.js",
