@@ -303,6 +303,37 @@ describe('invocation with no settings - webpack 5', function() {
     });
 });
 
+// Test resolveFromParentDirs
+describe('resolveFromParentDirs option', function() {
+
+    before(function(){
+        mockNodeModules();
+    });
+
+    it('should not include parent modules by default', function(done) {
+        // Parent modules won't be detected with mock-fs, so default behavior
+        // should only include the immediate node_modules
+        context.instance = nodeExternals();
+        testUtils.buildAssertion(context, 'moduleA', 'commonjs moduleA')(done);
+    });
+
+    it('should accept the option without throwing', function() {
+        expect(function() {
+            nodeExternals({ resolveFromParentDirs: true });
+        }).to.not.throw();
+    });
+
+    it('should accept the option set to false', function() {
+        expect(function() {
+            nodeExternals({ resolveFromParentDirs: false });
+        }).to.not.throw();
+    });
+
+    after(function(){
+        restoreMock();
+    });
+});
+
 describe('validate options', function () {
     it('should identify misspelled terms', function () {
         const results = utils.validateOptions({ whitelist: [], moduledirs: [] });
@@ -325,6 +356,20 @@ describe('validate options', function () {
         const results = utils.validateOptions({ allowlist: undefined, modulesdir: [] });
         expect(results.length).to.be.equal(1);
         expect(results[0].correctTerm).to.be.equal('modulesDir');
+    });
+    it('should identify misspelled binaryDirs', function () {
+        const results = utils.validateOptions({ binarydir: [] });
+        expect(results.length).to.be.equal(1);
+        expect(results[0].correctTerm).to.be.equal('binaryDirs');
+    });
+    it('should identify misspelled resolveFromParentDirs', function () {
+        const results = utils.validateOptions({ resolvefromparent: true });
+        expect(results.length).to.be.equal(1);
+        expect(results[0].correctTerm).to.be.equal('resolveFromParentDirs');
+    });
+    it('should not flag correct binaryDirs option', function () {
+        const results = utils.validateOptions({ binaryDirs: ['.bin'] });
+        expect(results.length).to.be.equal(0);
     });
 });
 

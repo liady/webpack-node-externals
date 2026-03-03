@@ -33,6 +33,7 @@ module.exports = function nodeExternals(options) {
     const modulesFromFile = !!options.modulesFromFile;
     const includeAbsolutePaths = !!options.includeAbsolutePaths;
     const additionalModuleDirs = options.additionalModuleDirs || [];
+    const resolveFromParentDirs = !!options.resolveFromParentDirs;
 
     // helper function
     function isNotBinary(x) {
@@ -48,6 +49,13 @@ module.exports = function nodeExternals(options) {
             utils.readDir(additionalDirectory).filter(isNotBinary)
         );
     });
+    if (resolveFromParentDirs) {
+        utils.findParentNodeModules(process.cwd()).forEach(function (parentDir) {
+            nodeModules = nodeModules.concat(
+                utils.readDir(parentDir).filter(isNotBinary)
+            );
+        });
+    }
 
     // return an externals function
     return function (...args) {

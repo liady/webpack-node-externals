@@ -77,6 +77,24 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
     return Object.keys(deps);
 };
 
+exports.findParentNodeModules = function findParentNodeModules(startDir) {
+    const dirs = [];
+    let currentDir = path.resolve(startDir || process.cwd());
+    const root = path.parse(currentDir).root;
+
+    // Traverse up from current directory, skipping the starting dir itself
+    currentDir = path.dirname(currentDir);
+
+    while (currentDir !== root) {
+        const nodeModulesDir = path.join(currentDir, 'node_modules');
+        if (fs.existsSync(nodeModulesDir)) {
+            dirs.push(nodeModulesDir);
+        }
+        currentDir = path.dirname(currentDir);
+    }
+    return dirs;
+};
+
 exports.containsPattern = function containsPattern(arr, val) {
     return (
         arr &&
@@ -102,6 +120,8 @@ exports.validateOptions = function (options) {
         modulesFromFile: ['modulesfile'],
         includeAbsolutePaths: ['includeAbsolutesPaths'],
         additionalModuleDirs: ['additionalModulesDirs', 'additionalModulesDir'],
+        binaryDirs: ['binarydir', 'binarydirs'],
+        resolveFromParentDirs: ['resolvefromparentdir', 'resolvefromparent'],
     };
     const optionsKeys = Object.keys(options);
     const optionsKeysLower = optionsKeys.map(function (optionName) {
