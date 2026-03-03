@@ -2,10 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 exports.contains = function contains(arr, val) {
-    return arr && arr.indexOf(val) !== -1;
+    return arr && arr.includes(val);
 };
 
-const atPrefix = new RegExp('^@', 'g');
+const atPrefix = /^@/;
 exports.readDir = function readDir(dirName) {
     if (!fs.existsSync(dirName)) {
         return [];
@@ -14,25 +14,19 @@ exports.readDir = function readDir(dirName) {
     try {
         return fs
             .readdirSync(dirName)
-            .map(function (module) {
+            .map((module) => {
                 if (atPrefix.test(module)) {
-                    // reset regexp
-                    atPrefix.lastIndex = 0;
                     try {
                         return fs
                             .readdirSync(path.join(dirName, module))
-                            .map(function (scopedMod) {
-                                return module + '/' + scopedMod;
-                            });
+                            .map((scopedMod) => module + '/' + scopedMod);
                     } catch (e) {
                         return [module];
                     }
                 }
                 return module;
             })
-            .reduce(function (prev, next) {
-                return prev.concat(next);
-            }, []);
+            .flat();
     } catch (e) {
         return [];
     }
@@ -69,14 +63,14 @@ exports.readFromPackageJson = function readFromPackageJson(options) {
         sections = [].concat(excludeFromBundle);
     }
     if (includeInBundle) {
-        sections = sections.filter(function (section) {
-            return [].concat(includeInBundle).indexOf(section) === -1;
-        });
+        sections = sections.filter(
+            (section) => ![].concat(includeInBundle).includes(section)
+        );
     }
     // collect dependencies
     const deps = {};
-    sections.forEach(function (section) {
-        Object.keys(packageJson[section] || {}).forEach(function (dep) {
+    sections.forEach((section) => {
+        Object.keys(packageJson[section] || {}).forEach((dep) => {
             deps[dep] = true;
         });
     });
@@ -92,7 +86,7 @@ exports.containsPattern = function containsPattern(arr, val) {
             } else if (typeof pattern === 'function') {
                 return pattern(val);
             } else {
-                return pattern == val;
+                return pattern === val;
             }
         })
     );

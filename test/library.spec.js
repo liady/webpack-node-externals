@@ -157,7 +157,7 @@ describe('respects an allowlist', function() {
         mockNodeModules();
         context.instance = nodeExternals({
             allowlist: ['moduleA/sub-module', 'moduleA/another-sub/index.js', 'moduleC', function (m) {
-                return m == 'moduleF';
+                return m === 'moduleF';
             }, /^moduleD/]
         });
     });

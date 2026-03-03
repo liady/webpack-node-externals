@@ -7,20 +7,20 @@
         "type": "git",
         "url": "https://github.com/liady/webpack-node-externals.git"
     },
-    "dependencies": {},
     "devDependencies": {
         "chai": "^3.5.0",
         "eslint": "^7.7.0",
         "eslint-plugin-import": "^2.22.0",
         "mocha": "^2.5.3",
-        "mock-fs": "^4.12.0",
+        "mock-fs": "^5.5.0",
         "ncp": "^2.0.0",
         "webpack": "^4.44.1"
     },
     "scripts": {
+        "lint": "eslint index.js utils.js test/",
         "unit": "mocha --colors ./test/*.spec.js",
         "unit-watch": "mocha --colors -w ./test/*.spec.js",
-        "test": "npm run unit-watch"
+        "test": "npm run lint && npm run unit"
     },
     "keywords": [
         "webpack",

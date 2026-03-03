@@ -1,9 +1,7 @@
 const utils = require('./utils');
 
-const scopedModuleRegex = new RegExp(
-    '@[a-zA-Z0-9][\\w-.]+/[a-zA-Z0-9][\\w-.]+([a-zA-Z0-9./]+)?',
-    'g'
-);
+const scopedModuleRegex =
+    /@[a-zA-Z0-9][\w-.]+\/[a-zA-Z0-9][\w-.]+([a-zA-Z0-9./]+)?/;
 
 function getModuleName(request, includeAbsolutePaths) {
     let req = request;
@@ -14,8 +12,6 @@ function getModuleName(request, includeAbsolutePaths) {
     }
     // check if scoped module
     if (scopedModuleRegex.test(req)) {
-        // reset regexp
-        scopedModuleRegex.lastIndex = 0;
         return req.split(delimiter, 2).join(delimiter);
     }
     return req.split(delimiter)[0];
@@ -25,10 +21,7 @@ module.exports = function nodeExternals(options) {
     options = options || {};
     const mistakes = utils.validateOptions(options) || [];
     if (mistakes.length) {
-        mistakes.forEach((mistake) => {
-            utils.error(mistakes.map((mistake) => mistake.message));
-            utils.log(mistake.message);
-        });
+        utils.error(mistakes.map((mistake) => mistake.message));
     }
     const webpackInternalAllowlist = [/^webpack\/container\/reference\//];
     const allowlist = []
